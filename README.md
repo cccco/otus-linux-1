@@ -1,3 +1,3 @@
 # Linux Administrator Course
 
-* [01 - Linux kernel](../master/hw01.md)
+* [01 - Linux kernel](../master/HW01/hw01.md)
