@@ -24,23 +24,29 @@
 ```console
 [root@lvm ~]# pvcreate /dev/sdb
   Physical volume "/dev/sdb" successfully created.
+
 [root@lvm ~]# pvs
   PV         VG         Fmt  Attr PSize   PFree 
   /dev/sda3  VolGroup00 lvm2 a--  <38.97g     0 
   /dev/sdb              lvm2 ---   10.00g 10.00g
+
 [root@lvm ~]# vgcreate vg_root /dev/sdb
   Volume group "vg_root" successfully created
+
 [root@lvm ~]# vgs
   VG         #PV #LV #SN Attr   VSize   VFree  
   VolGroup00   1   2   0 wz--n- <38.97g      0 
   vg_root      1   0   0 wz--n- <10.00g <10.00g
+
 [root@lvm ~]# lvcreate -n lv_root -l +100%FREE /dev/vg_root
   Logical volume "lv_root" created.
+
 [root@lvm ~]# lvs
   LV       VG         Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
   LogVol00 VolGroup00 -wi-ao---- <37.47g                                                    
   LogVol01 VolGroup00 -wi-ao----   1.50g                                                    
   lv_root  vg_root    -wi-a----- <10.00g                                                    
+
 [root@lvm ~]# mkfs.xfs /dev/vg_root/lv_root 
 meta-data=/dev/vg_root/lv_root   isize=512    agcount=4, agsize=655104 blks
          =                       sectsz=512   attr=2, projid32bit=1
@@ -51,6 +57,7 @@ naming   =version 2              bsize=4096   ascii-ci=0 ftype=1
 log      =internal log           bsize=4096   blocks=2560, version=2
          =                       sectsz=512   sunit=0 blks, lazy-count=1
 realtime =none                   extsz=4096   blocks=0, rtextents=0
+
 [root@lvm ~]# mount /dev/vg_root/lv_root /mnt/
 ```
 
@@ -103,13 +110,16 @@ done
 [root@lvm ~]# lvremove /dev/VolGroup00/LogVol00
 Do you really want to remove active logical volume VolGroup00/LogVol00? [y/n]: y
   Logical volume "LogVol00" successfully removed
+
 [root@lvm ~]# lvcreate -n VolGroup00/LogVol00 -L 8G /dev/VolGroup00
   Logical volume "LogVol00" created.
+
 [root@lvm ~]# lvs
   LV       VG         Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
   LogVol00 VolGroup00 -wi-a-----   8.00g                                                    
   LogVol01 VolGroup00 -wi-ao----   1.50g                                                    
   lv_root  vg_root    -wi-ao---- <10.00g                                                    
+
 [root@lvm ~]# mkfs.xfs /dev/VolGroup00/LogVol00
 [root@lvm ~]# mount /dev/VolGroup00/LogVol00 /mnt
 ```
@@ -123,6 +133,7 @@ xfsdump: dump complete: 18 seconds elapsed
 xfsdump: Dump Status: SUCCESS
 xfsrestore: restore complete: 18 seconds elapsed
 xfsrestore: Restore Status: SUCCESS
+
 [root@lvm ~]# for i in /proc/ /sys/ /dev/ /run/ /boot/; do mount --bind $i /mnt/$i; done
 [root@lvm ~]# chroot /mnt/
 [root@lvm /]# grub2-mkconfig -o /boot/grub2/grub.cfg
@@ -138,8 +149,10 @@ xfsrestore: Restore Status: SUCCESS
 [root@lvm boot]# pvcreate /dev/sdc /dev/sdd
   Physical volume "/dev/sdc" successfully created.
   Physical volume "/dev/sdd" successfully created.
+
 [root@lvm boot]# vgcreate vg_var /dev/sdc /dev/sdd
   Volume group "vg_var" successfully created
+
 [root@lvm boot]# vgs
   VG         #PV #LV #SN Attr   VSize   VFree  
   VolGroup00   1   2   0 wz--n- <38.97g <29.47g
@@ -201,8 +214,10 @@ sde                        8:64   0    1G  0 disk
 [root@lvm ~]# lvremove /dev/vg_root/lv_root
 Do you really want to remove active logical volume vg_root/lv_root? [y/n]: y
   Logical volume "lv_root" successfully removed
+
 [root@lvm ~]# vgremove /dev/vg_root
   Volume group "vg_root" successfully removed
+
 [root@lvm ~]# pvremove /dev/sdb
   Labels on physical volume "/dev/sdb" successfully wiped.
 ```
@@ -214,6 +229,7 @@ Do you really want to remove active logical volume vg_root/lv_root? [y/n]: y
 ```console
 [root@lvm ~]# lvcreate -n lv_home -L 2G /dev/VolGroup00
   Logical volume "lv_home" created.
+
 [root@lvm ~]# lvs
   LV       VG         Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
   LogVol00 VolGroup00 -wi-ao----   8.00g                                                    
