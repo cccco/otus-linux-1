@@ -236,6 +236,9 @@ Do you really want to remove active logical volume vg_root/lv_root? [y/n]: y
   LogVol01 VolGroup00 -wi-ao----   1.50g                                                    
   lv_home  VolGroup00 -wi-a-----   2.00g                                                    
   lv_var   vg_var     rwi-aor--- 900.00m                                    100.00          
+
+[root@lvm ~]# mkfs.xfs /dev/VolGroup00/lv_home
+[root@lvm ~]# mount /dev/VolGroup00/lv_home /mnt/
 ```
 
 Копируем текущий /home 
@@ -282,6 +285,7 @@ file1  file10  file2  file3  file4  file5  file6  file7  file8  file9  vagrant
 Восстанавливаемся со снапшота и проверяем наличие файлов 
 
 ```console
+[root@lvm ~]# umount /home
 [root@lvm ~]# lvconvert --merge /dev/VolGroup00/home_snap
   Merging of volume VolGroup00/home_snap started.
   VolGroup00/lv_home: Merged: 100.00%
