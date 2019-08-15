@@ -18,7 +18,7 @@ else
 	echo "Held by $(cat $lockfile)"
 fi
 
-#check line file
+# check line file
 if test -f "$lnfile"; then
     wasLine=$(cat $lnfile)
     curLine=$(wc -l $nginxLog | awk '{ print $1 }')
@@ -32,6 +32,10 @@ fi
 
 if [ $diffLine -ne 0 ]; then
 
+# date range
+firstNewLine=$((wasLine+1))
+startDate=$(sed -n "$firstNewLine{p;q}" $nginxLog | awk '{print $4}' | cut -c2-)
+endDate=$(sed -n "$curLine{p;q}" $nginxLog | awk '{print $4}' | cut -c2-)
 
 # tops
 top10IP=$(tail -n $diffLine $nginxLog | awk '{print $1}' | sort | uniq -c | sort -nr | head -n 10)
@@ -57,11 +61,12 @@ do
 fi
 done
 
-#normalization
+# normalization
 printHttpErrors=$(printf '%s\n' "${httpErrors[@]}")
 printHttpCodes=$(printf '%s\n' "${httpCodes[@]}")
+
 # send email
-echo -e "top 10 ip-addresses:\n $top10IP\n\n top 10 requests:\n $top10URL\n\n HTTP errors:\n $printHttpErrors\n\n All HTTP codes:\n $printHttpCodes" | mail -s "nginx log stats" root@localhost
+echo -e "Time range:\n $startDate - $endDate\n\n Top 10 ip-addresses:\n $top10IP\n\n Top 10 requests:\n $top10URL\n\n HTTP errors:\n $printHttpErrors\n\n All HTTP codes:\n $printHttpCodes" | mail -s "nginx log stats" root@localhost
 
 # if log file was not changed then send nothing
 else

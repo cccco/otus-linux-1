@@ -23,13 +23,16 @@ sudo bash nginx_parser.sh
 Получаем следующее письмо:
 
 ```
-From root Wed Aug 14 17:02:32 2019
-Date: Wed, 14 Aug 2019 17:02:32 +0300
+From root Thu Aug 15 15:20:04 2019
+Date: Thu, 15 Aug 2019 15:20:04 +0300
 To: root@localhost
 Subject: nginx log stats
 User-Agent: mail v14.9.14
 
-top 10 ip-addresses:
+Time range:
+ 15/Aug/2019:09:38:16 - 15/Aug/2019:09:59:33
+
+Top 10 ip-addresses:
      179 194.31.xx.xx
     177 194.28.xx.xx
     132 127.0.0.1
@@ -41,7 +44,7 @@ top 10 ip-addresses:
      29 93.72.xx.xx
      24 82.117.xx.xx
 
- top 10 requests:
+ Top 10 requests:
      258 /
      70 /whm-server-status
      41 /login
@@ -78,60 +81,61 @@ top 10 ip-addresses:
 При этом в файле содержащем номер последней строки: 
 ```console
 cat /var/local/lnfile
-1000
+4000
 ```
 
-После увеличения файла, видим, что значения изменились:
+После увеличения файла, видим, что значения и время изменились:
 
 ```
-From root Wed Aug 14 17:03:36 2019
-Date: Wed, 14 Aug 2019 17:03:36 +0300
+From root Thu Aug 15 15:32:36 2019
+Date: Thu, 15 Aug 2019 15:32:36 +0300
 To: root@localhost
 Subject: nginx log stats
 User-Agent: mail v14.9.14
 
-top 10 ip-addresses:
-     170 91.217.xx.xx
-     95 46.174.xx.xx
-     65 217.147.xx.xx
-     60 193.107.xx.xx
-     53 194.44.xx.xx
-     52 62.80.xx.xx
-     49 193.110.xx.xx
-     41 80.78.xx.xx
-     39 176.36.xx.xx
-     27 95.164.xx.xx
+Time range:
+ 15/Aug/2019:09:59:34 - 15/Aug/2019:10:43:54
 
- top 10 requests:
-      82 /login  
-     59 /category
-     47 /makeToken
-     37 /validateToken
-     37 /cart/add
-     33 /
-     24 /cart/show
-     15 /filter
-     14 /cart/list
-     10 /cart/update
+ Top 10 ip-addresses:
+     264 91.196.xx.xx
+    167 213.227.xx.xx
+    144 176.36.xx.xx
+    115 91.217.xx.xx
+    115 176.37.xx.xx
+    106 195.68.xx.xx
+     87 77.47.xx.xx
+     87 178.159.xx.xx
+     81 37.73.xx.xx
+     62 62.216.xx.xx
+
+ Top 10 requests:
+     126 /cart/add
+     74 /cart/show
+     54 /index.php/category
+     52 /category
+     41 /login
+     40 /autocomplete?search=1
+     34 /index.php/login
+     34 /index.php
+     34 /
+     30 /autocomplete?search=19-
 
  HTTP errors:
-422 -       7 /makeToken
-499 -       8 /whm-server-status
-500 -       4 /cart/show
+ 422 -       4 /makeToken
+499 -       9 /whm-server-status
 
  All HTTP codes:
-200 - 812
-201 - 36
-302 - 124
-422 - 7
-499 - 17
-500 - 4
+ 200 - 1755
+201 - 25
+302 - 187
+422 - 4
+499 - 29
 ```
 
-При этом количество строк увеличилось вдвое: 
+При этом количество строк тоже увеличилось: 
 
 ```console
 cat /var/local/lnfile
-2000
+6000
 ```
 
