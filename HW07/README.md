@@ -240,3 +240,86 @@ dracut module 'multipath' will not be installed, because command 'multipath' cou
 ![dracut](https://github.com/sinist3rr/otus-linux/blob/master/HW07/images/dracut.png)
 
 
+### Добавление ssh в initrd
+
+Имеем Centos установленный на зашифрованном разделе LUKS (и корень тоже).
+В результате при каждом включении сервера нужно набирать пароль:
+
+
+![luks](https://github.com/sinist3rr/otus-linux/blob/master/HW07/images/luks.png)
+
+Было бы удобно если бы была возможность ввести ключ удаленно по ssh. 
+Для это нужно добавить модуль в initrd. 
+Чтобы установить специальный модуль нужно добавить репозиторий: 
+```console
+yum install wget -y
+wget -O /etc/yum.repos.d/rbu-dracut-crypt-ssh-epel-7.repo https://copr.fedorainfracloud.org/coprs/rbu/dracut-crypt-ssh/repo/epel-7/rbu-dracut-crypt-ssh-epel-7.repo
+yum install dracut-crypt-ssh -y
+```
+
+Нужно дописать новые параметры, которые предоставит модуль (rd.neednet=1 ip=dhcp):
+```console
+vi /etc/default/grub
+GRUB_CMDLINE_LINUX="crashkernel=auto rd.neednet=1 ip=dhcp rd.luks.uuid=luks-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
+grub2-mkconfig -o /etc/grub2.cfg 
+```
+
+В конфиге установленного модуля нужно прописать пути к ssh ключам: 
+```console
+vi /etc/dracut.conf.d/crypt-ssh.conf
+
+dropbear_acl="/etc/dropbear/keys/authorized_keys"
+dropbear_ecdsa_key="/etc/dropbear/keys/ssh_ecdsa_key"
+dropbear_rsa_key="/etc/dropbear/keys/ssh_rsa_key"
+```
+
+Создать каталоги для хранения ключей: 
+```console
+mkdir /etc/dropbear/keys/
+chmod 700 /etc/dropbear/keys/
+```
+
+Создать ssh ключи: 
+
+```console
+ssh-keygen -t ecdsa -f /etc/dropbear/keys/ssh_ecdsa_key
+ssh-keygen -t rsa -f /etc/dropbear/keys/ssh_rsa_key
+chmod 400 /etc/dropbear/keys/*_key
+chmod 444 /etc/dropbear/keys/*.pub
+```
+
+Свой открытый публичный ssh ключ нужно разместить тоже: 
+```console
+vi /etc/dropbear/keys/authorized_keys
+```
+
+Все настройки завершены, осталось только собрать initrd: 
+
+```console
+dracut -fv
+```
+
+После перезагрузки на первый взгляд ничего не изменлось, и на консоли висит предложение ввести пароль для расшифровывания ФС.
+
+Но если подключится по ssh, то можно посмотреть что на удаленной консоли (команда console-peek) или расшифровать диск (console_auth): 
+
+```console
+$ssh -p222 root@192.168.56.101
+-sh-4.2# 
+-sh-4.2# console_peek
+
+
+Please enter passphrase for disk root (luks-94de567b-eb08-42fe-a448-0bbb1184da1a
+)!:
+
+
+
+-sh-4.2# console_auth
+Passphrase: 
+-sh-4.2# Connection to 192.168.56.101 closed by remote host.
+Connection to 192.168.56.101 closed.
+```
+
+И система успешно загружается дальше, монтируется корневой раздел и всё происходит в штатном режиме.
+
