@@ -172,9 +172,9 @@ sde                  8:64   0    1G  0 disk
 
 
 ```console
-[vagrant@lvm ~]$ sudo mkdir /usr/lib/dracut/modules.d/01pinguin
+[root@lvm ~]# mkdir /usr/lib/dracut/modules.d/01pinguin
 
-cat << EOF > /usr/lib/dracut/modules.d/01pinguin/module-setup.sh
+[root@lvm ~]# cat << EOF > /usr/lib/dracut/modules.d/01pinguin/module-setup.sh
 #!/bin/bash
 
 check () {
@@ -190,7 +190,7 @@ install() {
 }
 EOF
 
-cat << EOF > /usr/lib/dracut/modules.d/01pinguin/print-pinguin.sh
+[root@lvm ~]# cat << EOF > /usr/lib/dracut/modules.d/01pinguin/print-pinguin.sh
 #!/bin/bash
 
 exec 0<>/dev/console 1<>/dev/console 2<>/dev/console
