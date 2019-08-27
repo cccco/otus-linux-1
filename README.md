@@ -6,4 +6,5 @@
 * [04 - Linux Bash](../master/HW04/README.md)
 * [05 - Linux Processes](../master/HW05/README.md)
 * [06 - Linux Packages and Repos](../master/HW06/README.md)
+* [07 - Linux Boot](../master/HW07/README.md)
 
