@@ -16,16 +16,15 @@ Cпособ основан на изменении процесса с кото�
 
 Загружаемся в grub, нажимаем "e" и переходим в режим редактирования.
 
-![grub](grub.jpg)
+![grub](https://github.com/sinist3rr/otus-linux/blob/master/HW07/images/grub.png)
 
 Находим строку, которая начинается на linux16 и дописываем вместо "ro" строку "rw init=/sysroot/bin/sh" 
 
-![init](init.jpg)
-
+![init](https://github.com/sinist3rr/otus-linux/blob/master/HW07/images/init.png)
 
 Жмем Ctrl-X и загружаемся в минималистичный шелл.
 
-![init_sh](init_sh.jpg)
+![init_sh](https://github.com/sinist3rr/otus-linux/blob/master/HW07/images/init_sh.png)
 
 ```console
 :/# chroot /sysroot/
@@ -51,11 +50,11 @@ passwd: all authentication tokens updated successfully.
 Останавливаемся в загрузчике grub, переходим в редактирование. 
 Находим строку которая начинается на "linux16" и дописываем в конец "rd.break" 
 
-![rd](rd.jpg)
+![rd](https://github.com/sinist3rr/otus-linux/blob/master/HW07/images/rd.png)
 
 Нажимаем Ctrl-X и попадаем в шелл 
 
-![rd_shell](rd_shell.jpg)
+![rd_shell](https://github.com/sinist3rr/otus-linux/blob/master/HW07/images/rd_shell.png)
 
 ```console 
 switch_root:/# mount | grep sysroot
