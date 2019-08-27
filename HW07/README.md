@@ -87,7 +87,7 @@ switch_root:/# reboot
 
 ### 2. Установить систему с LVM, после чего переименовать VG
 
-(Использовался VAgrantfile с задания по LVM) 
+(Использовался Vagrantfile из ДЗ по LVM) 
 
 Изначально имеем: 
 
@@ -151,7 +151,7 @@ sde                       8:64   0    1G  0 disk
 [vagrant@lvm ~]$ sudo sed -i "s/VolGroup00/newvg/g" /boot/grub2/grub.cfg
 ```
 
-После переазгрузки: 
+После перезагрузки: 
 
 ```console
 [vagrant@lvm ~]$ lsblk 
@@ -167,4 +167,76 @@ sdc                  8:32   0    2G  0 disk
 sdd                  8:48   0    1G  0 disk 
 sde                  8:64   0    1G  0 disk 
 ```
+
+### 3. Добавляем кастомный модуль в initrd
+
+
+```console
+[vagrant@lvm ~]$ sudo mkdir /usr/lib/dracut/modules.d/01pinguin
+
+cat << EOF > /usr/lib/dracut/modules.d/01pinguin/module-setup.sh
+#!/bin/bash
+
+check () {
+    return 0
+}
+
+depends() {
+    return 0
+}
+
+install() {
+    inst_hook cleanup 00 "${moddir}/print-pinguin.sh"
+}
+EOF
+
+cat << EOF > /usr/lib/dracut/modules.d/01pinguin/print-pinguin.sh
+#!/bin/bash
+
+exec 0<>/dev/console 1<>/dev/console 2<>/dev/console
+
+cat <<'msgend'
+_______________________
+< I'm dracut module  >
+ -----------------------
+   \
+    \
+        .--.
+       |o_o |
+       |:_/ |
+      //   \ \
+     (|     | )
+    /'\_   _/'\
+    \___)=(___/
+
+msgend
+
+sleep 10
+echo "Continuing..."
+sleep 1
+
+EOF
+```
+
+Собираем initrd: 
+```console
+[root@lvm ~]# dracut -fv
+Executing: /sbin/dracut -fv
+dracut module 'busybox' will not be installed, because command 'busybox' could not be found!
+dracut module 'crypt' will not be installed, because command 'cryptsetup' could not be found!
+dracut module 'dmraid' will not be installed, because command 'dmraid' could not be found!
+dracut module 'dmsquash-live-ntfs' will not be installed, because command 'ntfs-3g' could not be found!
+dracut module 'multipath' will not be installed, because command 'multipath' could not be found!
+dracut module 'busybox' will not be installed, because command 'busybox' could not be found!
+dracut module 'crypt' will not be installed, because command 'cryptsetup' could not be found!
+dracut module 'dmraid' will not be installed, because command 'dmraid' could not be found!
+dracut module 'dmsquash-live-ntfs' will not be installed, because command 'ntfs-3g' could not be found!
+dracut module 'multipath' will not be installed, because command 'multipath' could not be found!
+*** Including module: bash ***
+*** Including module: pinguin ***
+...
+```
+
+![dracut](https://github.com/sinist3rr/otus-linux/blob/master/HW07/images/dracut.png)
+
 
