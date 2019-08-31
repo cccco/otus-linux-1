@@ -238,6 +238,7 @@ tcp    LISTEN     0      128      :::80                   :::*                  
 vagrant up
 vagrant ssh
 
+[root@jira ~]# systemctl restart jira # по неизвестной причине Vagrant не запускает с первого раза
 [root@jira ~]# systemctl status jira
 ● jira.service - JIRA Service
    Loaded: loaded (/etc/systemd/system/jira.service; disabled; vendor preset: disabled)
