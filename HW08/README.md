@@ -231,3 +231,30 @@ tcp    LISTEN     0      128      :::8080                 :::*                  
 tcp    LISTEN     0      128      :::80                   :::*                   users:(("httpd",pid=31735,fd=4),("httpd",pid=31734,fd=4),("httpd",pid=31733,fd=4),("httpd",pid=31732,fd=4),("httpd",pid=31731,fd=4),("httpd",pid=31730,fd=4),("httpd",pid=31729,fd=4)) ino:73909 sk:ffff9280369698c0 v6only:0 <->
 ```
 
+### 4. (*) Скачать демо-версию Atlassian Jira и переписать основной скрипт запуска на unit-файл
+
+```console
+
+vagrant up
+vagrant ssh
+
+[root@jira ~]# systemctl status jira
+● jira.service - JIRA Service
+   Loaded: loaded (/etc/systemd/system/jira.service; disabled; vendor preset: disabled)
+   Active: active (running) since Sat 2019-08-31 08:43:45 UTC; 13s ago
+     Docs: https://community.atlassian.com
+  Process: 10585 ExecStart=/opt/atlassian/jira/bin/start-jira.sh (code=exited, status=0/SUCCESS)
+ Main PID: 10619 (java)
+   CGroup: /system.slice/jira.service
+           └─10619 /opt/atlassian/jira/jre//bin/java -Djava.util.logging.config.file=/opt/atlassian/j...
+
+Aug 31 08:43:45 jira start-jira.sh[10585]: MMMMMM
+Aug 31 08:43:45 jira start-jira.sh[10585]: +MMMMM
+Aug 31 08:43:45 jira start-jira.sh[10585]: MMMMM
+Aug 31 08:43:45 jira start-jira.sh[10585]: `UOJ
+Aug 31 08:43:45 jira start-jira.sh[10585]: Atlassian Jira
+Aug 31 08:43:45 jira start-jira.sh[10585]: Version : 8.3.3
+```
+
+![jira](https://github.com/sinist3rr/otus-linux/blob/master/HW08/images/jira_web.png)
+
