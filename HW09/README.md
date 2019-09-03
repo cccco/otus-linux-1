@@ -7,17 +7,17 @@
 - после установки nginx должен быть в режиме enabled в systemd
 - должен быть использован notify для старта nginx после установки
 - сайт должен слушать на нестандартном порту - 8080, для этого использовать переменные в Ansible
-* cделать все это с использованием Ansible роли
+- (*) cделать все это с использованием Ansible роли
 ---
 
 ### Реализовано в виде ansible роли
 
-Запускаем и смотрим:
+Запускаем vagrant:
 
 
 ```console
 
-vagrant up
+$ vagrant up
 Bringing machine 'deb' up with 'virtualbox' provider...
 Bringing machine 'rpm' up with 'virtualbox' provider...
 ...skipped...
@@ -74,6 +74,7 @@ ok: [deb] => {
 PLAY RECAP *********************************************************************
 deb                        : ok=10   changed=4    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
 
+...skipped...
 ==> rpm: Running provisioner: ansible...
 Vagrant has automatically selected the compatibility mode '2.0'
 according to the Ansible version installed (2.8.4).
