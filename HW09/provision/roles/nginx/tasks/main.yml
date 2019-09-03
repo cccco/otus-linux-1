@@ -1,0 +1,29 @@
+---
+# tasks file for provision/roles/nginx
+
+- include_tasks: debian.yml
+  when: ansible_os_family == "Debian"
+
+- include_tasks: redhat.yml
+  when: ansible_os_family == "RedHat"
+
+- name: force all handlers so that all tests can run
+  meta: flush_handlers
+
+- name: test nginx port
+  shell: "ss -tulpen | grep 8080"
+  register: ss_output
+  changed_when: false
+
+- name: test nginx index page
+  shell: "curl http://127.0.0.1:8080"
+  register: curl_output
+  changed_when: false
+  args:
+    warn: false
+
+- debug:
+    var: ss_output.stdout
+- debug:
+    var: curl_output.stdout
+

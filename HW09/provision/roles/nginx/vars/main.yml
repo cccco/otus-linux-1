@@ -1,0 +1,14 @@
+---
+# vars file for provision/roles/nginx
+
+common_packages:
+  - "vim-enhanced"
+  - "git"
+  - "unzip"
+  - "epel-release"
+  - "libselinux-python"
+
+epel_packages:
+  - "nginx"
+  - "htop"
+
