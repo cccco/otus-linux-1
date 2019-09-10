@@ -1,0 +1,17 @@
+---
+# vars file for provision/roles/pam
+
+common_packages:
+  - "vim-enhanced"
+  - "git"
+  - "unzip"
+  - "epel-release"
+  - "libselinux-python"
+
+epel_packages:
+  - "pam_script"
+  - "htop"
+
+user2pass: "pass2"
+user1pass: "pass1"
+

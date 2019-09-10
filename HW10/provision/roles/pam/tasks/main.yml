@@ -1,0 +1,56 @@
+---
+# tasks file for provision/roles/pam
+
+- name: install common packages
+  yum:
+    name: "{{ common_packages }}"
+    state: "present"
+
+- name: disable selinux
+  selinux:
+    state: disabled
+
+- name: install the packages from epel repo
+  yum:
+    name: "{{ epel_packages }}"
+    state: "present"
+
+- name: add admin group
+  group:
+    name: admin
+    state: present
+
+- name: add user 'user1'
+  user:
+    name: user1
+    password: "{{ user1pass | password_hash('sha512') }}"
+    update_password: on_create
+
+- name: add user 'user2' with group 'admin'
+  user:
+    name: user2
+    groups: admin
+    password: "{{ user2pass | password_hash('sha512') }}"
+    update_password: on_create
+
+- name: enable ssh password auth
+  lineinfile: 
+       dest: /etc/ssh/sshd_config
+       regexp: 'PasswordAuthentication no' 
+       line: 'PasswordAuthentication yes'
+       backrefs: yes
+  notify: "restart ssh"
+
+- name: insert line in pam.d/sshd
+  lineinfile:
+       path: /etc/pam.d/sshd
+       line: 'account    required     pam_script.so'
+       insertafter: 'account    required     pam_nologin.so'
+
+- name: copy pam_script file
+  copy:
+    src: pam_script
+    dest: /etc/pam_script
+    mode: '0755'
+
+
