@@ -60,3 +60,14 @@ user2	ALL=(ALL) 	ALL
 user2        ALL=(ALL)       NOPASSWD: ALL
 ```
 
+---
+
+Полезные материалы:  
+
+https://www.digitalocean.com/community/tutorials/how-to-set-up-multi-factor-authentication-for-ssh-on-centos-7 
+
+
+https://8192.one/post/ssh_login_notification_withtelegram/ 
+
+https://access.redhat.com/solutions/64860 
+
