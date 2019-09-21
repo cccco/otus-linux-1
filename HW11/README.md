@@ -22,8 +22,8 @@ $ansible-galaxy install --roles-path ./provision/roles/ cloudalchemy.node-export
 $ansible-galaxy install --roles-path ./provision/roles/ cloudalchemy.grafana
 ```
 
-&#x1F534;Важно!   
-**Перед запуском требуется установить**:  
+&#x1F534; **Важно!**   
+&#x1F534; Перед запуском требуется установить:  
 
 ```console
 pip install jmespath
