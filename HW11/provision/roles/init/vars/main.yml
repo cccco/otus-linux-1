@@ -1,0 +1,10 @@
+---
+# vars file for provision/roles/init
+
+common_packages:
+  - "vim-enhanced"
+  - "git"
+  - "unzip"
+  - "epel-release"
+  - "libselinux-python"
+

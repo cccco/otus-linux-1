@@ -1,0 +1,8 @@
+---
+# tasks file for provision/roles/init
+
+- name: install common packages
+  yum:
+    name: "{{ common_packages }}"
+    state: "present"
+

@@ -1,0 +1,18 @@
+---
+- hosts: all
+  name: setup Prometheus
+  become: yes
+  roles:
+   - init
+   - cloudalchemy.prometheus
+   - cloudalchemy.node-exporter
+   - cloudalchemy.grafana
+  vars:
+    prometheus_targets:
+      node:
+      - targets:
+        - localhost:9100
+    grafana_security:
+          admin_user: admin
+          admin_password: admin
+    
