@@ -30,10 +30,18 @@ list jobs
 
 
 ```
-lits files jobid=1
+lits files jobid=19
 ```
 
 ![bacula2](https://github.com/sinist3rr/otus-linux/blob/master/HW12/images/bacula2.png)
+
+[list files jobid=19](https://github.com/sinist3rr/otus-linux/blob/master/HW12/jobid19.log) (Full)
+
+
+Полезные материалы:  
+- https://github.com/tyler-hitzeman/bacula/blob/master/troubleshooting.md
+- https://sysadm.mielnet.pl/bacula-and-selinux-denying-access/
+
 
 ### Borg
 
