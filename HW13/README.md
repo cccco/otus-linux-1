@@ -45,6 +45,9 @@ Login Succeeded
 - https://github.com/nginxinc/docker-nginx
 
 ### В чем разница между контейнером и образом?
+
+![dockers](https://github.com/sinist3rr/otus-linux/blob/master/HW13/images/dockers.png)
+
 Образы похожи на замороженные снапшоты контейнеров. 
 Образ обычно содержит объединение нескольких слоев файловых систем. Образ не имеет состояния и никогда не меняется.  
 Контейнер в свою очередь - это своего рода экземпляр образа. Важно, что при запуске контейнера создается слой файловой системы с возможностью чтения/записи.   
@@ -52,7 +55,7 @@ Login Succeeded
 ### Можно ли в контейнере собрать ядро?
 
 Можно собрать ядро, можно скомпилировать любое другое приложение, так же можно собирать пакеты.  
-[Например docker-kernel-builder](https://github.com/moul/docker-kernel-builder)
+[Например docker-kernel-builder](https://github.com/moul/docker-kernel-builder). 
 
 ### Docker-compose nginx и php
 
