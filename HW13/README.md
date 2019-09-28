@@ -44,12 +44,15 @@ Login Succeeded
 - https://www.linuxnix.com/how-to-push-docker-images-to-docker-hub-repository/
 - https://github.com/nginxinc/docker-nginx
 
+### В чем разница между контейнером и образом?
+
+### Можно ли в контейнере собрать ядро?
 
 ### Docker-compose nginx и php
 
-Для этого был собран контейнер `sinist3r/alpine-php`.
+Для этого был собран еще один кастомный контейнер `sinist3r/alpine-php`.
 
-Чтобы запустить:
+Чтобы запустить весь стек:
 
 ```console
 
