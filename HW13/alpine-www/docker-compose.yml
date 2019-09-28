@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+  web:
+    image: sinist3r/alpine-nginx:1.6
+    container_name: web
+    depends_on: 
+        - php
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+      - ./application:/var/application
+    ports:
+        - "8080:80"
+    networks:
+      www_net:
+
+  php:
+    image: sinist3r/alpine-php:1.2
+    container_name: php
+    volumes:
+      - ./application:/var/application
+    networks:
+      www_net:
+
+networks:
+  www_net:
+
