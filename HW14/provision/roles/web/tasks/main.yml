@@ -1,0 +1,24 @@
+---
+# tasks file for provision/roles/web
+
+- name: install epel
+  yum:
+    name: "epel-release"
+    state: "present"
+
+- name: install nginx
+  yum:
+    name: "nginx"
+    state: "present"
+  notify: restart nginx
+
+- name: configure rsyslog send crit messages
+  blockinfile:
+    path: /etc/rsyslog.conf
+    marker: "# {mark} ANSIBLE MANAGED BLOCK: enable remote logging"
+    content: |
+      # ### begin forwarding rule ###
+      *.=crit @192.168.56.11:514
+      # ### end of the forwarding rule ###
+  notify: restart rsyslog
+
