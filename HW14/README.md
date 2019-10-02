@@ -18,7 +18,7 @@
 
 ---
 
-### Был выбран ryslog 
+### Был выбран rsyslog 
 
 Для запуска: 
 
@@ -74,8 +74,4 @@ node=web type=PROCTITLE msg=audit(10/02/2019 14:21:59.495:3956) : proctitle=vi /
 - https://docs.nginx.com/nginx/admin-guide/monitoring/logging/
 - https://www.server-world.info/en/note?os=CentOS_7&p=audit&f=2
 - https://stackoverflow.com/questions/41053331/ansible-how-to-restart-auditd-service-on-centos-7-get-error-about-dependency
-
-
-### Работа с ELK
-
 
