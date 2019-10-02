@@ -22,3 +22,56 @@
       # ### end of the forwarding rule ###
   notify: restart rsyslog
 
+- name: configure nginx to send access logs to remote server
+  lineinfile:
+    path: /etc/nginx/nginx.conf
+    state: present
+    regexp: 'access_log  /var/log/nginx/access.log  main;'
+    line: 'access_log      syslog:server=192.168.56.11:514,facility=local7,tag=nginx,severity=info main;'
+    backrefs: yes
+  notify: restart nginx
+
+- name: configure nginx to store locally only crit logs
+  lineinfile:
+    path: /etc/nginx/nginx.conf
+    state: present
+    regexp: '(error_log /var/log/nginx/error.log);'
+    line: '\1 crit;'
+    backrefs: yes
+  notify: restart nginx
+
+- name: configure nginx to send errors to remote server
+  lineinfile:
+    path: /etc/nginx/nginx.conf
+    state: present
+    insertafter: '^error_log.*'
+    line: 'error_log syslog:server=192.168.56.11:514,facility=local7,tag=nginx,severity=error;'
+  notify: restart nginx
+
+- name: install audisp plugin
+  yum:
+    name: audispd-plugins
+    state: present
+
+- name: set remote auditd server
+  lineinfile:
+    path: /etc/audisp/audisp-remote.conf
+    regexp: 'remote_server ='
+    line: 'remote_server = 192.168.56.11'
+    backrefs: yes
+  notify: restart auditd
+
+- name: enable auditd remote logging
+  lineinfile:
+    path: /etc/audisp/plugins.d/au-remote.conf
+    regexp: 'active = no'
+    line: 'active = yes'
+    backrefs: yes
+  notify: restart auditd
+
+- name: add auditd rule
+  template:
+      dest: /etc/audit/rules.d/nginx.rules
+      src: nginx.rules.j2
+  notify: restart auditd
+

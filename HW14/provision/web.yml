@@ -1,0 +1,7 @@
+---
+- hosts: all
+  name: setup web srv
+  become: yes
+  roles:
+    - role: web
+

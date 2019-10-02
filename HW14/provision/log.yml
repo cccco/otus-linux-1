@@ -1,0 +1,7 @@
+---
+- hosts: all
+  name: setup log server
+  become: yes
+  roles:
+    - role: log
+

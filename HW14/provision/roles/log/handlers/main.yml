@@ -6,4 +6,7 @@
     name: "rsyslog"
     state: "restarted"
 
+- name: "restart auditd"
+  # dont works with service module https://stackoverflow.com/questions/41053331/ansible-how-to-restart-auditd-service-on-centos-7-get-error-about-dependency
+  command: service auditd restart
 

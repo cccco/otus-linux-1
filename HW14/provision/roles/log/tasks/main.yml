@@ -4,12 +4,12 @@
 - name: configure rsyslog listening
   lineinfile:
     path: /etc/rsyslog.conf
-    regexp: '^#({{ item }}.*)'
+    regexp: '^#({{ item.regexp }}.*)'
     line: '\1'
     backrefs: yes
   loop:
-    - { '\$ModLoad imudp' }
-    - { '\$UDPServerRun 514' }
+    - { regexp: '\$ModLoad imudp' }
+    - { regexp: '\$UDPServerRun 514' }
   notify: restart rsyslog
 
 - name: configure rsyslog template
@@ -21,4 +21,12 @@
       & stop
     insertafter: '$UDPServerRun 514'
   notify: restart rsyslog
+
+- name: set audtid listen for messages
+  lineinfile:
+    path: /etc/audit/auditd.conf
+    regexp: '^##(tcp_listen_port = 60)$'
+    line: '\1'
+    backrefs: yes
+  notify: restart auditd
 
