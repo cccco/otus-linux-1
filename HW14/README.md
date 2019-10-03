@@ -75,3 +75,26 @@ node=web type=PROCTITLE msg=audit(10/02/2019 14:21:59.495:3956) : proctitle=vi /
 - https://www.server-world.info/en/note?os=CentOS_7&p=audit&f=2
 - https://stackoverflow.com/questions/41053331/ansible-how-to-restart-auditd-service-on-centos-7-get-error-about-dependency
 
+### Вместо ELK был выбран Graylog
+
+При первоначальном запуске создается в том числе VM graylog, устанавливается сам сервер и все его зависимости. В качестве бэкенда для хранения сообщений используется Elasticsearch.   
+Можно сразу пробовать подключаться по адресу `http://192.168.56.100/`  
+Логин `admin`, пароль `graylogPASS`.  
+Если перейти в `http://192.168.56.100/system/inputs` то попадаем в раздел настроек input.
+По сути - это слушающие сервисы, поддерживаются все дата шипперы ELK (filebeat, winlogbeat, auditbeat и т.д.), а так же стандартный syslog и своя разработка - GELF.   
+В нашем случае, ansible через API сразу же добавил один input - `Syslog UDP via API`.   
+Если в конфиге nginx будет указано отправлять логи на удаленный syslog сервер, то graylog их сразу начнет получать.
+
+
+Для проверки обращаемся к несуществующей странице:   
+
+```console
+[vagrant@log ~]$ curl -I http://192.168.56.10/adminnn
+HTTP/1.1 404 Not Found
+
+```
+
+И видим следующий результат:  
+
+![graylog](https://github.com/sinist3rr/otus-linux/blob/master/HW14/images/graylog.png)
+

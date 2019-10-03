@@ -83,3 +83,11 @@
     line: 'error_log syslog:server=192.168.56.100:1514,facility=local7,tag=nginx,severity=error;'
   notify: restart nginx
 
+- name: configure nginx to access logs to GL server
+  lineinfile:
+    path: /etc/nginx/nginx.conf
+    state: present
+    insertafter: '^access_log      syslog'
+    line: 'access_log      syslog:server=192.168.56.100:1514,facility=local7,tag=nginx,severity=info main;'
+  notify: restart nginx
+
