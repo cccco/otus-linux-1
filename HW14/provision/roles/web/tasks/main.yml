@@ -75,3 +75,11 @@
       src: nginx.rules.j2
   notify: restart auditd
 
+- name: configure nginx to send errors to GL server
+  lineinfile:
+    path: /etc/nginx/nginx.conf
+    state: present
+    insertafter: '^error_log syslog'
+    line: 'error_log syslog:server=192.168.56.100:1514,facility=local7,tag=nginx,severity=error;'
+  notify: restart nginx
+

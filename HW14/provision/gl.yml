@@ -1,0 +1,13 @@
+---
+- hosts: all
+  name: setup GL
+  become: yes
+  roles:
+     - { role: graylog-ansible-role }
+  vars:
+            graylog_root_timezone: "Europe/Kiev"
+            graylog_elasticsearch_shards: 1
+            graylog_nginx_ipaddress: '192.168.56.100'
+            graylog_install_telegram_alert: false
+            graylog_create_input_api: true
+
