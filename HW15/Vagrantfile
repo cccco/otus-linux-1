@@ -18,6 +18,8 @@ MACHINES = {
                    {ip: '192.168.0.1', adapter: 3, netmask: "255.255.255.240", virtualbox__intnet: "dir-net"},
                    {ip: '192.168.0.33', adapter: 4, netmask: "255.255.255.240", virtualbox__intnet: "hw-net"},
                    {ip: '192.168.0.65', adapter: 5, netmask: "255.255.255.192", virtualbox__intnet: "mgt-net"},
+                   {ip: '192.168.20.2', adapter: 6, netmask: "255.255.255.252", virtualbox__intnet: "o1-net"},
+                   {ip: '192.168.10.2', adapter: 7, netmask: "255.255.255.252", virtualbox__intnet: "o2-net"},
                 ]
   },
   
@@ -36,6 +38,7 @@ MACHINES = {
                    {ip: '192.168.2.65', adapter: 3, netmask: "255.255.255.192", virtualbox__intnet: "test-net"},
                    {ip: '192.168.2.129', adapter: 4, netmask: "255.255.255.192", virtualbox__intnet: "man-net"},
                    {ip: '192.168.2.193', adapter: 5, netmask: "255.255.255.192", virtualbox__intnet: "hw-net"},
+                   {ip: '192.168.20.1', adapter: 6, netmask: "255.255.255.252", virtualbox__intnet: "o1-net"},
                 ]
   },
   :office1Server => {
@@ -53,6 +56,7 @@ MACHINES = {
                    {ip: '192.168.1.1', adapter: 2, netmask: "255.255.255.128", virtualbox__intnet: "dev-net"},
                    {ip: '192.168.1.129', adapter: 3, netmask: "255.255.255.192", virtualbox__intnet: "test-net"},
                    {ip: '192.168.1.193', adapter: 4, netmask: "255.255.255.192", virtualbox__intnet: "hw-net"},
+                   {ip: '192.168.10.1', adapter: 5, netmask: "255.255.255.252", virtualbox__intnet: "o2-net"},
                 ]
   },
   :office2Server => {
