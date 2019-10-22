@@ -1,0 +1,22 @@
+---
+- hosts: all
+  name: setup ipa client
+  become: yes
+  vars:
+          ipaclient_domain: "otus.lan"
+          ipaadmin_principal: "admin"
+          ipaadmin_password: "ADMPassword123"
+          ipaclient_mkhomedir: yes
+  pre_tasks:
+  - name: change name resolver
+    lineinfile:
+        path: /etc/resolv.conf
+        regexp: "nameserver 10.0.2.3"
+        line: "nameserver 192.168.56.10"
+  - name: change domain
+    lineinfile:
+        path: /etc/resolv.conf
+        line: "domain otus.lan"
+  roles:
+    - role: ipaclient
+

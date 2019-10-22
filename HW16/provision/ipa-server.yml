@@ -1,0 +1,27 @@
+---
+- hosts: all
+  name: setup freeIPA server
+  become: yes
+  vars:
+            ipaserver_domain: "otus.lan"
+            ipaserver_realm: "OTUS.LAN"
+            #ipaserver_hostname: "ipa.otus.lan"
+            ipaserver_setup_dns: yes
+            ipaserver_forwarders: 
+              - 8.8.8.8
+              - 1.1.1.1
+            ipaadmin_password: "ADMPassword123"
+            ipadm_password: "DMPassword234"
+            ipaserver_ip_addresses: 
+              - 192.168.56.10
+            ipaserver_setup_firewalld: false
+  pre_tasks:
+  - name: change /etc/hosts
+    lineinfile:
+        path: /etc/hosts
+        regexp: "127.0.0.1	ipa.otus.lan	ipa"
+        line: "192.168.56.10	ipa.otus.lan	ipa"
+  roles:
+    - role: ipaserver
+      state: present
+
