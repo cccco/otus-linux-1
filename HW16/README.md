@@ -7,7 +7,7 @@
 
 ---
 
-### Реализовано с использованием официальных ansible ролей сервера и клиента
+### Реализовано с использованием официальных ansible ролей сервера и клиента FreeIPA
 
 **Прим.**    
 Если выделить под VM сервер freeIPA всего 1ГБ оперативной памяти, то плейбук отрабатывает через раз. Если выделить 2ГБ, то ansible работает стабильно.     
@@ -18,7 +18,7 @@
 vagrant up
 ```
 
-Проверить результаты: 
+Смотрим результаты: 
 
 ![network](https://github.com/sinist3rr/otus-linux/blob/master/HW16/images/ipa1.png)
 
@@ -54,7 +54,7 @@ Added user "smith"
   Kerberos keys available: True
 
 ```
-И пробуем на клиенте:  
+Проверяем на клиенте:  
 
 ```console
 [root@client ~]# su - smith
@@ -64,6 +64,8 @@ Creating home directory for smith.
 ```
 
 ### Добавление ssh ключей
+
+Добавляем свой публичный ssh ключ: 
 
 ```console
 [root@ipa ~]# ipa user-mod smith --sshpubkey="ssh-rsa 12345abcde= ipaclient.otus.lan"
