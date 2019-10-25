@@ -92,3 +92,21 @@ vagrant@192.168.255.1's password:
 
 Подключение прошло успешно, port knocking работает. 
 
+### Port forwarding
+
+Для проброса портов vagrant добавляет два правила в iptables:
+
+```console
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 8080 -j DNAT --to-destination 192.168.0.2:80
+iptables -t nat -A POSTROUTING ! -s 127.0.0.1 -j MASQUERADE
+```
+Первое правило непосредственно осуществляет пересылку пакетов приходящих на порт 8080 inetRouter2 в сторону centralServer и его порт 80. 
+Второе правило - решает проблему с адресом отправителя, для того чтобы ответ nginx шел не в мир, а на inetRouter2.   
+
+В результате если в браузере обратится на localhost:
+
+
+![nginx](https://github.com/sinist3rr/otus-linux/blob/master/HW17/images/net2.png)
+
+Видим, что порт пробрасывается. 
+
