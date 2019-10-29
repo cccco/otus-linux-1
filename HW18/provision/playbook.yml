@@ -1,0 +1,6 @@
+---
+- hosts: all
+  name: provision R1
+  become: yes
+  roles:
+    - role: ospf

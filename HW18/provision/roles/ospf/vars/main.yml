@@ -1,0 +1,5 @@
+---
+# vars file for provision/roles/ospf
+packages:
+  - "quagga"
+  - "traceroute"

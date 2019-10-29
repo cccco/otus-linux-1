@@ -1,0 +1,69 @@
+---
+# tasks file for provision/roles/ospf
+- name: install packages
+  yum:
+    name: "{{ packages }}"
+    state: "present"
+
+- name: set ip forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: place R1 quagga config
+  copy:
+    src: zebra_R1.conf
+    dest: /etc/quagga/zebra.conf
+    owner: quagga
+    group: quagga
+  notify: restart quagga
+  when: inventory_hostname == "R1"
+
+- name: place R1 ospfd config
+  copy:
+    src: ospfd_R1.conf
+    dest: /etc/quagga/ospfd.conf
+    owner: quagga
+    group: quagga
+  notify: restart ospfd
+  when: inventory_hostname == "R1"
+
+- name: place R2 quagga config
+  copy:
+    src: zebra_R2.conf
+    dest: /etc/quagga/zebra.conf
+    owner: quagga
+    group: quagga
+  notify: restart quagga
+  when: inventory_hostname == "R2"
+
+- name: place R2 ospfd config
+  copy:
+    src: ospfd_R2.conf
+    dest: /etc/quagga/ospfd.conf
+    owner: quagga
+    group: quagga
+  notify: restart ospfd
+  when: inventory_hostname == "R2"
+
+- name: place R3 quagga config
+  copy:
+    src: zebra_R3.conf
+    dest: /etc/quagga/zebra.conf
+    owner: quagga
+    group: quagga
+  notify: restart quagga
+  when: inventory_hostname == "R3"
+
+- name: place R3 ospfd config
+  copy:
+    src: ospfd_R3.conf
+    dest: /etc/quagga/ospfd.conf
+    owner: quagga
+    group: quagga
+  notify: restart ospfd
+  when: inventory_hostname == "R3"
+
