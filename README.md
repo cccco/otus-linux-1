@@ -18,4 +18,5 @@
 * [18 - Networking](../master/HW15/README.md)
 * [19 - LDAP](../master/HW16/README.md)
 * [20 - iptables](../master/HW17/README.md)
+* [21 - OSPF](../master/HW18/README.md)
 
