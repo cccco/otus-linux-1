@@ -1,0 +1,6 @@
+---
+# handlers file for provision/roles/vlan
+- name: "restart network"
+  service:
+    name: "network"
+    state: "restarted"

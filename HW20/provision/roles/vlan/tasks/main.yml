@@ -1,0 +1,29 @@
+---
+# tasks file for provision/roles/vlan
+- name: Copy testClient1 vlan config
+  copy:
+    src: "ifcfg-eth1.10_tC1"
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth1.10
+  notify: restart network
+  when: inventory_hostname == "testClient1"
+
+- name: Copy testClient2 vlan config
+  copy:
+    src: "ifcfg-eth1.20_tC2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth1.20
+  notify: restart network
+  when: inventory_hostname == "testClient2"
+
+- name: Copy testServer1 vlan config
+  copy:
+    src: "ifcfg-eth1.10_tS1"
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth1.10
+  notify: restart network
+  when: inventory_hostname == "testServer1"
+
+- name: Copy testServer2 vlan config
+  copy:
+    src: "ifcfg-eth1.20_tS2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth1.20
+  notify: restart network
+  when: inventory_hostname == "testServer2"
