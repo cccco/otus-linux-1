@@ -1,0 +1,6 @@
+---
+- hosts: all
+  name: provision bonding
+  become: yes
+  roles:
+    - role: bond

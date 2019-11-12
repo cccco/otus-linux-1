@@ -1,0 +1,60 @@
+---
+# tasks file for provision/roles/bond
+
+- name: install libselinux
+  yum:
+    name: libselinux-python
+    state: present
+
+- name: Load bonding module for centos 6
+  shell: modprobe bonding
+  when: inventory_hostname == "inetRouter"
+
+- name: Add the bonding module
+  modprobe:
+    name: bonding
+    state: present
+  when: inventory_hostname == "centralRouter"
+
+- name: Copy inetRouter bond0 config
+  copy:
+    src: "ifcfg-bond0_iR"
+    dest: /etc/sysconfig/network-scripts/ifcfg-bond0
+  notify: restart network
+  when: inventory_hostname == "inetRouter"
+
+- name: Copy inetRouter eth1 config
+  copy:
+    src: "ifcfg-eth1"
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth1
+  notify: restart network
+  when: inventory_hostname == "inetRouter"
+
+- name: Copy inetRouter eth2 config
+  copy:
+    src: "ifcfg-eth2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth2
+  notify: restart network
+  when: inventory_hostname == "inetRouter"
+
+- name: Copy centralRouter bond0 config
+  copy:
+    src: "ifcfg-bond0_cR"
+    dest: /etc/sysconfig/network-scripts/ifcfg-bond0
+  notify: restart network
+  when: inventory_hostname == "centralRouter"
+
+- name: Copy centralRouter eth1 config
+  copy:
+    src: "ifcfg-eth1"
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth1
+  notify: restart network
+  when: inventory_hostname == "centralRouter"
+
+- name: Copy centralRouter eth2 config
+  copy:
+    src: "ifcfg-eth2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth2
+  notify: restart network
+  when: inventory_hostname == "centralRouter"
+
