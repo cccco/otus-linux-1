@@ -20,4 +20,5 @@
 * [20 - iptables](../master/HW17/README.md)
 * [21 - OSPF](../master/HW18/README.md)
 * [22 - DNS](../master/HW19/README.md)
+* [24 - VLAN](../master/HW20/README.md)
 
