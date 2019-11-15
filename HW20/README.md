@@ -20,7 +20,7 @@ testClient2 <-> testServer2
 
 ### Топология
 
-![vlan](https://github.com/sinist3rr/otus-linux/blob/master/HW20/images/vlan1.png)
+![vlan](https://github.com/sinist3rr/otus-linux/blob/master/HW20/images/vlan1.jpg)
 
 ### Запуск
 
