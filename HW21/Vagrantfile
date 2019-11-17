@@ -7,15 +7,15 @@ MACHINES = {
   :server => {
         :box_name => "centos/7",
         :net => [
-                   {ip: '192.168.10.1', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "wan"},
-                   {ip: '192.168.1.1', adapter: 3, netmask: "255.255.255.0", virtualbox__intnet: "net1"},
+                   {ip: '192.168.10.10', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "wan"},
+                   {ip: '192.168.1.10', adapter: 3, netmask: "255.255.255.0", virtualbox__intnet: "net1"},
                 ]
   },
   :client => {
         :box_name => "centos/7",
         :net => [
-                   {ip: '192.168.10.2', adapter: 2, netmask: "255.255.255.252", virtualbox__intnet: "wan"},
-                   {ip: '192.168.2.1', adapter: 3, netmask: "255.255.255.0", virtualbox__intnet: "net2"},
+                   {ip: '192.168.10.20', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "wan"},
+                   {ip: '192.168.2.10', adapter: 3, netmask: "255.255.255.0", virtualbox__intnet: "net2"},
                 ]
   },
   
@@ -44,22 +44,8 @@ Vagrant.configure("2") do |config|
         SHELL
         
         case boxname.to_s
-        when "inetRouter"
-          box.vm.provision "ansible" do |ansible|
-            ansible.playbook = "./provision/playbook_bond.yml"
-          end            
-#            sysctl net.ipv4.conf.all.forwarding=1
-#            iptables -t nat -A POSTROUTING ! -d 192.168.0.0/16 -o eth0 -j MASQUERADE
-#            ip route add 192.168.0.0/16 via 192.168.255.2
-        when "centralRouter"
-           box.vm.provision "ansible" do |ansible|
-            ansible.playbook = "./provision/playbook_bond.yml"
-          end            
-#            sysctl net.ipv4.conf.all.forwarding=1
-#            ip r del default
-#            ip r add default via 192.168.255.1
-#            ip r add 192.168.1.0/24 via 192.168.10.1
-#            ip r add 192.168.2.0/24 via 192.168.20.1
+        when "server"
+          box.vm.network "forwarded_port", guest: 1194, host: 1194
         end
 
       end

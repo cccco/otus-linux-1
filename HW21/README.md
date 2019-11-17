@@ -3,9 +3,11 @@
 Задание:  
 
 1. Между двумя виртуалками поднять vpn в режимах: 
-- tun
-- tap
+- tun 
+- tap 
+
 Прочуствовать разницу. 
+
 
 2. Поднять RAS на базе OpenVPN с клиентскими сертификатами, подключиться с локальной машины на виртуалку 
 ---
@@ -69,7 +71,7 @@ verb 3
 ```console
 dev tap
 proto udp
-remote 192.168.10.1
+remote 192.168.10.10
 
 ifconfig 10.10.10.2 255.255.255.0
 topology subnet
@@ -281,4 +283,160 @@ iperf Done.
 - На практике чаще всего используется L3 TUN вариант, но если нужно объединить несколько ethernet сегментов, то можно использовать TAP, в таком случае будет что-то вроде L2 коммутатора.
 
 ### RAS
+
+Устанавливаем сервер:
+
+```console
+[root@server ~]# yum install -y epel-release
+[root@server ~]# yum install -y openvpn easy-rsa policycoreutils-python
+```
+
+Инициализация PKI: 
+
+```console
+[root@server ~]# cd /etc/openvpn/
+[root@server openvpn]# /usr/share/easy-rsa/3.0.6/easyrsa init-pki
+
+init-pki complete; you may now create a CA or requests.
+Your newly created PKI dir is: /etc/openvpn/pki
+
+```
+
+Генерируем ключи для сервера: 
+
+```console
+[root@server openvpn]# /usr/share/easy-rsa/3.0.6/easyrsa build-ca nopass
+[root@server openvpn]# /usr/share/easy-rsa/3.0.6/easyrsa gen-dh
+[root@server openvpn]# /usr/share/easy-rsa/3.0.6/easyrsa build-server-full server nopass
+[root@server openvpn]# openvpn --genkey --secret ta.key
+
+[root@server openvpn]# mkdir keys
+[root@server openvpn]# cp ta.key keys/
+[root@server openvpn]# cp pki/ca.crt keys/
+[root@server openvpn]# cp pki/dh.pem keys/
+[root@server openvpn]# cp pki/issued/server.crt keys/
+[root@server openvpn]# cp pki/private/server.key keys/
+
+```
+
+Генерируем сертификат для клиента:  
+
+```console
+[root@server openvpn]# /usr/share/easy-rsa/3.0.6/easyrsa build-client-full client nopass
+```
+
+Конфиг сервера:
+
+```
+proto udp
+dev tun
+
+ca /etc/openvpn/keys/ca.crt
+cert /etc/openvpn/keys/server.crt
+key /etc/openvpn/keys/server.key 
+dh /etc/openvpn/keys/dh.pem
+
+server 10.10.10.0 255.255.255.0
+route 192.168.10.0 255.255.255.0
+push "route 192.168.10.0 255.255.255.0"
+ifconfig-pool-persist ipp.txt
+client-to-client
+client-config-dir /etc/openvpn/client
+
+keepalive 10 120
+tls-auth /etc/openvpn/keys/ta.key 0
+key-direction 0
+cipher AES-256-CBC
+
+persist-key
+persist-tun
+
+status /var/log/openvpn-status.log
+log /var/log/openvpn.log
+verb 3
+```
+
+Запускаем openvpn сервер:  
+
+```console
+[root@server ~]# systemctl enable --now openvpn@server
+```
+
+Теперь конфиг клиента:  
+
+```
+dev tun
+proto udp
+remote 192.168.10.10
+client
+resolv-retry infinite
+
+ca ./ca.crt
+cert ./client.crt
+key ./client.key
+
+route 192.168.10.0 255.255.255.0
+
+persist-key
+persist-tun
+
+verb 3
+
+```
+
+Подключаемся к серверу:
+
+```console
+┌─[✗]─[sinister@desk]─[~]
+└──╼ $sudo openvpn --config client.conf
+Sun Nov 17 12:35:26 2019 OpenVPN 2.4.8 [git:makepkg/3976acda9bf10b5e+] x86_64-pc-linux-gnu [SSL (OpenSSL)] [LZO] [LZ4] [EPOLL] [PKCS11] [MH/PKTINFO] [AEAD] built on Oct 30 2019
+Sun Nov 17 12:35:26 2019 library versions: OpenSSL 1.1.1d  10 Sep 2019, LZO 2.10
+Sun Nov 17 12:35:26 2019 Outgoing Control Channel Authentication: Using 160 bit message hash 'SHA1' for HMAC authentication
+Sun Nov 17 12:35:26 2019 Incoming Control Channel Authentication: Using 160 bit message hash 'SHA1' for HMAC authentication
+Sun Nov 17 12:35:26 2019 TCP/UDP: Preserving recently used remote address: [AF_INET]192.168.10.10:1194
+Sun Nov 17 12:35:26 2019 Socket Buffers: R=[212992->212992] S=[212992->212992]
+Sun Nov 17 12:35:26 2019 UDP link local (bound): [AF_INET][undef]:1194
+Sun Nov 17 12:35:26 2019 UDP link remote: [AF_INET]192.168.10.10:1194
+Sun Nov 17 12:35:26 2019 TLS: Initial packet from [AF_INET]192.168.10.10:1194, sid=0311008a 6342c53d
+Sun Nov 17 12:35:26 2019 VERIFY OK: depth=1, CN=rasvpn
+Sun Nov 17 12:35:26 2019 VERIFY KU OK
+Sun Nov 17 12:35:26 2019 Validating certificate extended key usage
+Sun Nov 17 12:35:26 2019 ++ Certificate has EKU (str) TLS Web Server Authentication, expects TLS Web Server Authentication
+Sun Nov 17 12:35:26 2019 VERIFY EKU OK
+Sun Nov 17 12:35:26 2019 VERIFY OK: depth=0, CN=server
+Sun Nov 17 12:35:26 2019 [server] Peer Connection Initiated with [AF_INET]192.168.10.10:1194
+Sun Nov 17 12:35:48 2019 PUSH: Received control message: 'PUSH_REPLY,route 192.168.10.0 255.255.255.0,route 10.10.10.0 255.255.255.0,topology net30,ping 10,ping-restart 120,ifconfig 10.10.10.6 10.10.10.5,peer-id 0,cipher AES-256-GCM'
+...
+Sun Nov 17 12:35:48 2019 Initialization Sequence Completed
+```
+
+Проверяем:
+
+```console
+┌─[sinister@desk]─[~]
+└──╼ $ip -c a s dev tun0
+5: tun0: <POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN group default qlen 100
+    link/none 
+    inet 10.10.10.6 peer 10.10.10.5/32 scope global tun0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::8869:d771:c935:18d5/64 scope link stable-privacy 
+       valid_lft forever preferred_lft forever
+
+┌─[sinister@desk]─[~]
+└──╼ $ip r | grep tun
+10.10.10.0/24 via 10.10.10.5 dev tun0 
+10.10.10.5 dev tun0 proto kernel scope link src 10.10.10.6 
+
+┌─[sinister@desk]─[~]
+└──╼ $ping -c 4 10.10.10.1
+PING 10.10.10.1 (10.10.10.1) 56(84) bytes of data.
+▁▁▁▁
+ 0/  4 ( 0%) lost;    0/   0/   0ms; last:    0ms
+ 0/  4 ( 0%) lost;    0/   0/   0/   0ms (last 4)
+--- 10.10.10.1 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3026ms
+rtt min/avg/max/mdev = 0.477/0.564/0.708/0.088 ms
+
+
+```
 
