@@ -22,4 +22,5 @@
 * [22 - DNS](../master/HW19/README.md)
 * [24 - VLAN](../master/HW20/README.md)
 * [25 - VPN](../master/HW21/README.md)
+* [26 - nginx](../master/HW22/README.md)
 
