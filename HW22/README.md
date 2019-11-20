@@ -69,5 +69,5 @@ Accept-Ranges: bytes
 ```
 
 В браузере: 
-![nginx](https://github.com/sinist3rr/otus-linux/blob/master/HW22/images/nginx1.jpg)
+![nginx](https://github.com/sinist3rr/otus-linux/blob/master/HW22/images/nginx1.png)
 
