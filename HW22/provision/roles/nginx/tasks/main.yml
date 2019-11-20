@@ -1,0 +1,19 @@
+---
+# tasks file for provision/roles/nginx
+- name: install epel
+  yum:
+    name: epel-release
+    state: present
+
+- name: install nginx
+  yum:
+    name: nginx
+    state: present
+  notify: restart nginx
+
+- name: nginx config
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+  notify: restart nginx
+
