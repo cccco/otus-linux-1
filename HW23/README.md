@@ -17,9 +17,9 @@
 
 Реализовано без использования СУБД, виртуальные домены и пользователи хранятся в файлах.  
 
-Все конфиги, которые менялись приложены в соответсвующих каталогах. 
-Конфиг postfix -  [postfix](postfix/main.cf)   
-Конфиг dovecot -  [dovecot](dovecot/dovecot.conf)    
+Все конфиги, которые менялись приложены в соответствующих каталогах:       
+- Конфиг [postfix](postfix/main.cf)   
+- Конфиг [dovecot](dovecot/dovecot.conf)    
 
 
 ### Отправка почты
@@ -34,7 +34,10 @@
 
 ![console](https://github.com/sinist3rr/otus-linux/blob/master/HW23/images/mail1.png) 
 
+### Получение почты
+
 В почтовом клиенте: 
+
 ![thunder](https://github.com/sinist3rr/otus-linux/blob/master/HW23/images/mail3.png) 
 
 ![thunder2](https://github.com/sinist3rr/otus-linux/blob/master/HW23/images/mail2.png) 
