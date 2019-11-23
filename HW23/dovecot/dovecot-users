@@ -1,0 +1,4 @@
+user1@otus.net::1001:1001::/var/spool/mail/vhosts/otus.net/:/bin/false::
+user2@otus.net::1001:1001::/var/spool/mail/vhosts/otus.net/:/bin/false::
+admin@otus.net::1001:1001::/var/spool/mail/vhosts/otus.net/:/bin/false::
+

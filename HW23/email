@@ -1,0 +1,15 @@
+Return-Path: <jsmith@example.com>
+X-Original-To: admin@otus.net
+Delivered-To: admin@otus.net
+Received: from otus.net (unknown [192.168.56.1])
+	by mail.otus.net (Postfix) with ESMTP id E7D7511EAA
+	for <admin@otus.net>; Sat, 23 Nov 2019 12:17:14 +0000 (UTC)
+From: John Smith <jsmith@example.com>
+To: Alexander <admin@otus.net>
+Subject: Sending an email using telnet
+Content-Type: text/plain
+
+Hello,
+
+This is a mail test.
+
