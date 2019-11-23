@@ -23,4 +23,5 @@
 * [24 - VLAN](../master/HW20/README.md)
 * [25 - VPN](../master/HW21/README.md)
 * [26 - nginx](../master/HW22/README.md)
+* [27 - mail](../master/HW23/README.md)
 
