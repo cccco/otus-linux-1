@@ -1,0 +1,46 @@
+---
+# tasks file for provision/roles/slave
+- name: Install percona repository
+  yum:
+    name: "https://repo.percona.com/yum/percona-release-latest.noarch.rpm"
+    state: present
+
+- name: Install percona Server and co
+  yum:
+    name:
+      - Percona-Server-server-57
+      - MySQL-python
+    state: present
+  notify: restart mysql
+
+- name: copy mysql configs
+  copy: src={{ item }} dest=/etc/my.cnf.d/
+  with_fileglob: "*.cnf"
+  notify: restart mysql
+
+- name: Force all notified handlers to run at this point
+  meta: flush_handlers
+
+- name: Set temp mysql password
+  shell: grep 'A temporary password is generated' /var/log/mysqld.log | awk '{print $11}' | head -1
+  register: temp_password
+
+- name: Change mysql password
+  shell:
+    mysql --connect-expired-password -uroot -p'{{ temp_password.stdout }}' -e 'ALTER USER USER() IDENTIFIED BY "{{ mysql_password }}"'
+
+- name: Setup and run slave
+  shell: |
+    mysql \
+      -uroot \
+      -p'{{ mysql_password }}' \
+      -e 'CHANGE MASTER TO \
+        MASTER_HOST="192.168.56.10", \
+        MASTER_USER="{{ replication_user }}", \
+        MASTER_PASSWORD="{{ replication_password }}", \
+        MASTER_AUTO_POSITION=1;'
+    mysql \
+      -uroot \
+      -p'{{ mysql_password }}' \
+      -e 'START SLAVE;'
+

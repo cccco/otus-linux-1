@@ -1,0 +1,8 @@
+---
+# handlers file for provision/roles/slave
+- name: restart mysql
+  service:
+    name: mysql
+    state: restarted
+    enabled: yes
+

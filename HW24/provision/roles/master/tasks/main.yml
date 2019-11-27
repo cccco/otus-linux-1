@@ -1,0 +1,57 @@
+---
+# tasks file for provision/roles/master
+
+- name: Install percona repository
+  yum: 
+    name: "https://repo.percona.com/yum/percona-release-latest.noarch.rpm"
+    state: present
+
+- name: Install percona Server and co
+  yum: 
+    name: 
+      - Percona-Server-server-57
+      - MySQL-python
+    state: present
+  notify: restart mysql
+
+- name: Copy mysql configs
+  copy: src={{ item }} dest=/etc/my.cnf.d/
+  with_fileglob: "*.cnf"
+  notify: restart mysql
+
+- name: Force all notified handlers to run at this point
+  meta: flush_handlers
+
+- name: Set temp mysql password
+  shell: grep 'A temporary password is generated' /var/log/mysqld.log | awk '{print $11}' | head -1
+  register: temp_password
+
+- name: Change mysql password
+  shell:
+    mysql --connect-expired-password -uroot -p'{{ temp_password.stdout }}' -e 'ALTER USER USER() IDENTIFIED BY "{{ mysql_password }}"'
+
+- name: Create a bet DB
+  mysql_db:
+    login_user: root
+    login_password: "{{ mysql_password }}"
+    name: bet
+    state: present
+
+- name: Import bet database
+  mysql_db:
+    login_user: root
+    login_password: "{{ mysql_password }}"
+    name: bet
+    state: import
+    target: /vagrant/provision/bet.dmp
+
+- name: Create database user with all database privileges
+  mysql_user:
+    login_user: root
+    login_password: "{{ mysql_password }}"
+    name: "{{ replication_user }}"
+    password: "{{ replication_password }}"
+    host: '%'
+    priv: '*.*:ALL'
+    state: present
+
