@@ -24,4 +24,5 @@
 * [25 - VPN](../master/HW21/README.md)
 * [26 - nginx](../master/HW22/README.md)
 * [27 - mail](../master/HW23/README.md)
+* [28 - MySQL replication](../master/HW24/README.md)
 
