@@ -28,13 +28,14 @@ vagrant up
             return 302 http://$http_host/setc;
         }
 
-            try_files $uri /index.html index.php;
+            ~~try_files $uri /index.html index.php;~~
     }
         
 
     location /setc {
         add_header Set-Cookie "secret=s3cr3t1";
-        return 302 http://$http_host;
+        ~~return 302 http://$http_host;~~
+        return 302 http://$http_host$request_uri;
     }
 
 ```
