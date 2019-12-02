@@ -25,4 +25,5 @@
 * [26 - nginx](../master/HW22/README.md)
 * [27 - mail](../master/HW23/README.md)
 * [28 - MySQL replication](../master/HW24/README.md)
+* [29 - MySQL cluster](../master/HW25/README.md)
 
