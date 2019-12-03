@@ -23,18 +23,36 @@ vagrant up
 
 ```
 
-    location / {
-        if ($http_cookie !~* "secret=s3cr3t1") {
-            return 302 http://$http_host/setc;
+      location / {
+            if ($http_cookie !~* "secret=s3cr3t1") {
+                add_header Set-Cookie "base_uri=http://$http_host$request_uri";
+                return 302 http://$http_host/setc;
+            }
+                
         }
 
-    }
-        
 
-    location /setc {
-        add_header Set-Cookie "secret=s3cr3t1";
-        return 302 http://$http_host$request_uri;
-    }
+        location /foo {
+             if ($http_cookie !~* "secret=s3cr3t1") {
+                add_header Set-Cookie "base_uri=http://$http_host$request_uri";
+                return 302 http://$http_host/setc;
+            }
+            alias /var/www/;
+        }
+
+        location /setc {
+
+
+	     add_header Set-Cookie "secret=s3cr3t1";
+
+             if ($cookie_base_uri) {
+                return 302 $cookie_base_uri;
+            }
+
+                 return 302 http://$http_host;
+
+        }
+
 
 ```
 
