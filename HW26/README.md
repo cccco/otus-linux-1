@@ -65,10 +65,7 @@ postgres=# select * from employees;
 И смотрим что на слейве:   
 
 ```console
-[root@slave ~]# su - posgres
-su: user posgres does not exist
 [root@slave ~]# su - postgres
--bash-4.2$ 
 -bash-4.2$ 
 -bash-4.2$ psql 
 psql (11.6)
