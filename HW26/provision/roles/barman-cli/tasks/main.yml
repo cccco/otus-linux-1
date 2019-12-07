@@ -1,0 +1,25 @@
+---
+# tasks file for provision/roles/barman-cli
+- name: install epel repo
+  yum:
+    name: epel-release
+    state: present
+
+- name: download barman repo file
+  get_url:
+    url: https://dl.2ndquadrant.com/default/release/get/11/rpm
+    dest: /tmp/barman-repo.sh
+    mode: 0550
+
+- name: install barman repo
+  shell: /tmp/barman-repo.sh
+  args:
+    creates: /etc/yum.repos.d/2ndquadrant-dl-default-release-pg11.repo
+
+- name: install barman
+  yum:
+    name: 
+      - barman
+      - barman-cli
+    state: present
+

@@ -1,0 +1,20 @@
+- name: setup master
+  hosts: master
+  become: True
+  roles:
+    - barman-cli
+    - postgres11-master
+
+- name: setup slave
+  hosts: slave
+  become: True
+  roles:
+    - postgres11-slave
+
+- name: setup backup
+  hosts: backup
+  become: True
+  roles:
+    - postgres11-client
+    - barman
+

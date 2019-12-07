@@ -1,0 +1,12 @@
+---
+# tasks file for provision/roles/postgres11-client
+- name: install postgresql repo
+  yum:
+    name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+    state: present
+
+- name: install postgresql client
+  yum:
+    name: postgresql11
+    state: present
+
