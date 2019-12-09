@@ -27,4 +27,5 @@
 * [28 - MySQL replication](../master/HW24/README.md)
 * [29 - MySQL cluster](../master/HW25/README.md)
 * [30 - PostgreSQL replication](../master/HW26/README.md)
+* [31 - PostgreSQL cluster](../master/HW27/README.md)
 
