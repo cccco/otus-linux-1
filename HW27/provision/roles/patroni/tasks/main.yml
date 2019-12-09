@@ -1,0 +1,82 @@
+---
+# tasks file for provision/roles/patroni
+
+- name: Patroni | install | epel
+  yum: 
+    name: epel-release
+    state: present
+
+- name: Patroni | install | Install patroni requiered packages
+  yum:
+    name: "{{ packages }}"
+    state: present
+
+- name: Patroni | install | Add postgresql-11 repo
+  yum:
+    name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+    state: present
+
+- name: Patroni | install | Install postgresql-11
+  yum:
+    name: postgresql11-server
+    state: present
+
+- name: Patroni | install | Upgrade pip
+  pip:
+    name: pip
+    state: forcereinstall
+
+- name: Patroni | install | Install pip packages
+  pip:
+    name: "{{ pip_packages }}"
+    state: present
+  tags:
+    - pip
+
+- name: Patroni | install | Upgrade setuptools
+  pip: 
+    name: setuptools
+    state: forcereinstall
+
+- name: Patroni | install | Install patroni
+  pip:
+    name: patroni
+    state: present
+  tags:
+    - pip-patroni
+
+- name: Patroni | configure | Configure patroni systemd service file
+  template:
+    src: patroni.service.j2
+    dest: /etc/systemd/system/patroni.service
+
+- name: Patroni | configure | Create patroni directories
+  file:                        
+    path: "{{ item }}"         
+    state: directory           
+    owner: postgres            
+    group: postgres            
+    mode: 0700                 
+  with_items:                  
+      - /var/data/base         
+      - /etc/patroni/          
+  tags:                        
+    - dirs                     
+
+- name: Patroni | configure | Copy patroni config file
+  template:                    
+    src: patroni.yml.j2        
+    dest: /etc/patroni/patroni.yml  
+
+- name: Patroni | configure | Start patroni cluster
+  systemd:                     
+    name: patroni              
+    state: restarted           
+    daemon_reload: True        
+    enabled: true              
+
+- name: Patroni | configure | place bashrc file
+  template:
+    src: bashrc.j2
+    dest: /root/.bashrc
+

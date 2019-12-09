@@ -1,0 +1,15 @@
+- name: setup dcs
+  hosts: consul
+  become: True
+  roles:
+    - consul
+
+- name: setup db
+  hosts: 
+    - pg1
+    - pg2
+    - pg3
+  become: True
+  roles:
+    - patroni
+
