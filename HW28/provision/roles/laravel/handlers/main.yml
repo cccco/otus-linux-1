@@ -1,0 +1,14 @@
+---
+# handlers file for provision/roles/laravel
+- name: restart php-fpm
+  systemd:
+    name: php-fpm
+    state: restarted
+    enabled: yes
+
+- name: restart nginx
+  systemd:
+    name: nginx
+    state: restarted
+    enabled: yes
+

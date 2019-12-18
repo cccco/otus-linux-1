@@ -1,0 +1,81 @@
+---
+# tasks file for provision/roles/laravel
+- name: install epel
+  yum:
+    name: epel-release
+    state: present
+
+- name: install required packages
+  yum:
+    name: "{{ required_packages }}"
+    state: present
+
+- name: disable SELinux
+  selinux:
+    state: disabled
+
+- name: install nginx
+  yum:
+    name: nginx
+    state: present
+
+- name: install php-fpm packages
+  yum:
+    name: "{{ php_packages }}"
+    state: present
+
+- name: copy fpm www.conf
+  copy:
+    src: www.conf
+    dest: /etc/php-fpm.d/www.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart php-fpm
+
+- name: copy nginx laravel.conf
+  copy:
+    src: laravel.conf
+    dest: /etc/nginx/conf.d/laravel.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart nginx
+
+- name: create laravel dir
+  file:
+    path: /var/www/laravel
+    state: directory
+    mode: '0755'
+    owner: nginx
+    group: root
+
+- name: install composer and laravel
+  shell: |
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
+    cd /var/www/laravel
+    composer create-project laravel/laravel .
+
+- name: copy laravel helloworld route
+  copy:
+    src: routes.php
+    dest: /var/www/laravel/app/Http/routes.php
+
+- name: fix laravel dir owner
+  file:
+    path: /var/www/laravel
+    state: directory
+    recurse: yes
+    owner: nginx
+    group: nginx
+
+- name: fix laravel storage owner
+  file:
+    path: /var/www/laravel/storage
+    state: directory
+    mode: '0755'
+    owner: nginx
+    group: nginx
+
