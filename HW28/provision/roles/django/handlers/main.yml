@@ -1,0 +1,16 @@
+---
+# handlers file for provision/roles/django
+
+- name: restart uwsgi
+  systemd:
+    name: uwsgi
+    state: restarted
+    daemon-reload: yes
+    enabled: yes
+
+- name: restart nginx
+  systemd:
+    name: nginx
+    state: restarted
+    enabled: yes
+
