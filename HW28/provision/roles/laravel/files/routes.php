@@ -19,7 +19,7 @@ Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
 ]);
-Route::get('helloworld', function () {
-    return '<h1>Hello World OTUS LINUX</h1>';
+Route::get('otus', function () {
+    return '<h1>Hello OTUS LINUX</h1>';
 });
 

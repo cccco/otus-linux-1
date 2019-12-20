@@ -1,0 +1,59 @@
+---
+# tasks file for provision/roles/react
+
+- name: install nodejs repo
+  shell: curl -sL https://rpm.nodesource.com/setup_10.x | bash -
+
+- name: install nodejs
+  yum:
+    name: nodejs
+    state: present
+
+- name: create react app
+  shell: |
+    cd /tmp
+    npm install -g create-react-app
+    create-react-app hello-world
+
+- name: copy react app.js
+  copy:
+    src: App.js
+    dest: /tmp/hello-world/src/App.js
+ 
+- name: build react app
+  shell: |
+    cd /tmp/hello-world
+    npm run build
+
+- name: create react dir
+  file:
+    path: /var/www/react
+    state: directory
+    mode: '0755'
+    owner: nginx
+    group: nginx
+
+- name: copy app to react dir
+  copy:
+    src: /tmp/hello-world/build/
+    dest: /var/www/react
+    remote_src: yes
+
+- name: set react dir owner
+  file:
+    path: /var/www/react
+    state: directory
+    recurse: yes
+    owner: nginx
+    group: nginx
+
+- name: copy react config
+  copy:
+    src: react.conf
+    dest: /etc/nginx/conf.d/react.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart nginx
+
