@@ -29,4 +29,5 @@
 * [30 - PostgreSQL replication](../master/HW26/README.md)
 * [31 - PostgreSQL cluster](../master/HW27/README.md)
 * [33 - Dynamic Web](../master/HW28/README.md)
+* [34 - NFS](../master/HW29/README.md)
 
