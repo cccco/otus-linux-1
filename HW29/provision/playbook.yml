@@ -1,0 +1,12 @@
+- name: setup nfs server
+  hosts: nfsserver
+  become: True
+  roles:
+    - nfs-server
+
+- name: setup nfs client
+  hosts: nfsclient
+  become: True
+  roles:
+    - nfs-client
+

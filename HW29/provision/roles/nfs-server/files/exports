@@ -1,0 +1,1 @@
+/var/nfs	nfsclient(rw,sync,no_subtree_check,no_root_squash,nohide,anonuid=1000,anongid=1000)

@@ -1,0 +1,28 @@
+---
+# tasks file for provision/roles/nfs-server
+
+- name: install nfs
+  yum:
+    name: nfs-utils
+    state: present
+
+- name: create nfs share dir
+  file:
+    path: /var/nfs
+    state: directory
+    owner: vagrant
+    group: vagrant
+    mode: '0755'
+
+- name: copy exports
+  copy:
+    src: exports
+    dest: /etc/exports
+  notify: restart nfs-server
+
+- name: copy nfs.conf
+  copy:
+    src: nfs.conf
+    dest: /etc/nfs.conf
+  notify: restart nfs-server
+
