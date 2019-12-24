@@ -1,0 +1,22 @@
+---
+# tasks file for provision/roles/nfs-firewall
+
+- name: enable firewalld
+  service: 
+    name: firewalld 
+    state: started 
+    enabled: yes
+
+- name: add firewalld nfs rules
+  firewalld:
+    service: "{{ item }}"
+    permanent: yes
+    state: enabled
+  with_items:
+    - nfs
+    - mountd
+    - rpc-bind
+
+- name: reload firewalld
+  shell: firewall-cmd --reload
+

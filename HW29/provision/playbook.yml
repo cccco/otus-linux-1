@@ -2,11 +2,12 @@
   hosts: nfsserver
   become: True
   roles:
+    - nfs-firewall
     - nfs-server
 
 - name: setup nfs client
   hosts: nfsclient
   become: True
   roles:
+    - nfs-firewall
     - nfs-client
-

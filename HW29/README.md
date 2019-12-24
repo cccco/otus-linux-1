@@ -56,3 +56,27 @@ total 0
 
 ```
 
+Правила firewalld: 
+
+```console
+[root@nfsserver ~]# firewall-cmd --state
+running
+[root@nfsserver ~]# firewall-cmd --list-all
+public (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: eth0 eth1
+  sources: 
+  services: ssh dhcpv6-client nfs mountd rpc-bind
+  ports: 
+  protocols: 
+  masquerade: no
+  forward-ports: 
+  source-ports: 
+  icmp-blocks: 
+  rich rules: 
+	
+
+```
+
+
