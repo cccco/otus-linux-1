@@ -1,0 +1,76 @@
+---
+# tasks file for provision/roles/nc-mysql
+
+- name: add MariaDB repo
+  yum_repository:
+    name: mariadb
+    description: Extra Packages for Enterprise Linux 7 - $basearch
+    baseurl: http://yum.mariadb.org/10.3/centos{{ ansible_distribution_major_version|int }}-amd64
+    gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+    gpgcheck: yes
+    enabled: 1
+
+- name: install MariaDB
+  yum:
+    name:
+      - MariaDB-server
+      - MariaDB-client
+    enablerepo: mariadb
+    state: present
+
+- name: install PyMySQL from pip
+  pip: 
+    name: PyMySQL
+    state: present
+
+- name: create conf dir
+  file:
+    name: "/etc/my.cnf.d/"
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+
+- name: configure mariadb
+  template:
+    src: my.cnf.j2
+    dest: "/etc/my.cnf.d/my.cnf"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart mariadb
+
+- name: start and enable MariaDB
+  systemd:
+    name: mysql
+    state: restarted
+    enabled: true
+
+- name: remove anonymous user
+  mysql_user:
+    name: ''
+    host_all: yes
+    state: absent
+    login_unix_socket: "/var/lib/mysql/mysqld.sock"
+
+- name: remove test db
+  mysql_db:
+    name: test
+    state: absent
+    login_unix_socket: "/var/lib/mysql/mysqld.sock"
+  
+- name: create nextcloud db
+  mysql_db:
+    name: "nextcloud"
+    collation: utf8mb4_general_ci
+    encoding: utf8mb4
+    login_unix_socket: "/var/lib/mysql/mysqld.sock"
+
+- name: create nextcloud user
+  mysql_user:
+    name:     "{{ nc_db_user }}"
+    password: "{{ nc_db_passwd }}"
+    priv:     "nextcloud.*:ALL"
+    state: present
+    login_unix_socket: "/var/lib/mysql/mysqld.sock"
+

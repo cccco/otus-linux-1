@@ -1,0 +1,8 @@
+---
+# handlers file for provision/roles/nc-nginx
+
+- name: restart nginx
+  systemd:
+    name: nginx
+    state: restarted
+

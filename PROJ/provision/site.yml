@@ -1,0 +1,12 @@
+---
+- hosts: nextcloud
+  name: setup everything
+  become: yes
+  roles:
+    - role: nc-os
+    - role: nc-nginx
+    - role: nc-ssl
+    - role: nc-redis
+    - role: nc-php
+    - role: nc-mysql
+

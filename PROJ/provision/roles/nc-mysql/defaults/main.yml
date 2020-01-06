@@ -1,0 +1,6 @@
+---
+# defaults file for provision/roles/nc-mysql
+
+nc_db_user: 'nextcloud'
+nc_db_passwd: '9h%w)XeM}$g7CXMR'
+
