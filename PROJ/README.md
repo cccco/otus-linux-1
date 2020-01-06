@@ -2,12 +2,12 @@
 
 Задание:  
 
-В проект должны быть включены:
-— как минимум 2 узла с СУБД; 
-— минимум 2 узла с веб-серверами; 
-— настройка межсетевого экрана (запрещено всё, что не разрешено); 
-— скрипты резервного копирования; 
-— центральный сервер сбора логов (Rsyslog/Journald/ELK). 
+В проект должны быть включены:  
+— как минимум 2 узла с СУБД;   
+— минимум 2 узла с веб-серверами;   
+— настройка межсетевого экрана (запрещено всё, что не разрешено);   
+— скрипты резервного копирования;   
+— центральный сервер сбора логов (Rsyslog/Journald/ELK).  
 
 ---
 
@@ -23,11 +23,11 @@ vagrant up
 
 ### Проверки
 
-Устанавливается Nextcloud Server.
+Устанавливается Nextcloud Server.  
 
 Проверить можно обратившись по адресу: 
 
-http://192.168.56.10
+http://192.168.56.10 
 
 Проверяем работу php-fpm	
 
@@ -67,11 +67,11 @@ Jan 06 16:16:35 nextcloud systemd[1]: Started The PHP FastCGI Process Manager.
 
 ```
 
-Known issues:
+Known issues: 
 
-- `firewall-cmd --list-all` shows epmty
-- `firewall-cmd --list-ports` shows empty (but reload...)
+- `firewall-cmd --list-all` shows epmty 
+- `firewall-cmd --list-ports` shows empty (but reload...) 
 - selinux blocks php-fpm: 
-- `NOTICE: PHP message: PHP Fatal error:  apc_mmap: mkstemp on /tmp/apc.Vh4gUH failed in Unknown on line 0`
-- mariadb need to be replaced by mysql
+- `NOTICE: PHP message: PHP Fatal error:  apc_mmap: mkstemp on /tmp/apc.Vh4gUH failed in Unknown on line 0`  
+- mariadb need to be replaced by mysql  
 
