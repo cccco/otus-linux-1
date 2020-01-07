@@ -68,7 +68,7 @@
   firewalld:
     port: "{{ item }}"
     permanent: true
-    immediate: false
+    immediate: true
     state: enabled
   with_items:
     - '22/tcp'

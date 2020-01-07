@@ -11,7 +11,7 @@
     - role: nc-mysql
     - role: nc-app
   post_tasks:
-    - name: We are ready
+    - name: Done!
       debug:
         msg: 
           - "Your Nextcloud at https://{{ fqdn }} is ready."
