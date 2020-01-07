@@ -1,0 +1,98 @@
+---
+# tasks file for provision/roles/nc-app
+
+- name: download nextcloud archive
+  get_url:
+    url:  "{{ next_archive }}"
+    dest: /tmp/nextcloud.tar.bz2
+    checksum: "sha256:{{ next_archive }}.sha256"
+
+- name: install nextcloud
+  unarchive:
+    src: /tmp/nextcloud.tar.bz2
+    dest: /var/www
+    remote_src: true
+    creates: /var/www/nextcloud/occ
+
+- name: set ownership back
+  file: 
+    dest: /var/www/
+    owner: nginx
+    group: nginx 
+    recurse: yes
+
+- name: flush all handlers to restart server
+  meta: flush_handlers
+
+- name: first setup nextcloud
+  become_user: "nginx"
+  become: yes
+  shell: >
+    php occ  maintenance:install
+    --database mysql
+    --database-host "localhost"
+    --database-name nextcloud
+    --database-table-prefix oc_
+    --database-user {{ nc_db_user }}
+    --database-pass {{ nc_db_passwd }}
+    --admin-user {{ nc_admin }}
+    --admin-pass {{ nc_passwd }}
+    --data-dir /var/nc-data
+  args:
+    chdir: /var/www/nextcloud/
+    creates: /var/www/nextcloud/config/config.php
+  register: setup_nc
+
+- name: set nextcloud domain config.php values
+  become_user: "nginx"
+  become: yes
+  shell: php occ config:system:set {{ item.key }} {{ item.value }}
+  args:
+    chdir: /var/www/nextcloud/
+  with_items: "{{ nc_config }}"
+
+- name: copy config.json to /tmp
+  copy:
+    src: "config.json"
+    dest: /tmp/nextcloud.config.json
+    owner: "nginx"
+    mode: 0600
+
+- name: set default config
+  become_user: "nginx"
+  become: yes
+  shell: php occ config:import /tmp/nextcloud.config.json
+  args:
+    chdir: /var/www/nextcloud/
+  register: setup_nc_config
+
+- name: set cron to run background jobs
+  become_user: "nginx"
+  become: yes
+  shell: php occ background:cron
+  args:
+    chdir: /var/www/nextcloud/
+
+- name: adjust app settings
+  become_user: "nginx"
+  become: yes
+  shell: php occ app:{{ item.key }} {{ item.value }}
+  args:
+    chdir: /var/www/nextcloud/
+  with_items: "{{ nc_app_config }}"
+
+- name: add nextcloud cronjob
+  cron:
+    name: nextcloud cronjob
+    minute: '*/15'
+    user: "nginx"
+    job: "php -f /var/www/nextcloud/cron.php > /dev/null 2>&1"
+
+- name: run nextcloud cronjob
+  become_user: "nginx"
+  become: yes
+  shell: php -f /var/www/nextcloud/cron.php
+  args:
+    chdir: /var/www/nextcloud/
+  when: setup_nc is changed
+

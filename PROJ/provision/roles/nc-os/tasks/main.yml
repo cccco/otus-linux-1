@@ -26,6 +26,10 @@
     state: present
     enablerepo: epel
 
+- name: disable SELinux
+  selinux:
+    state: disabled
+
 - name: sysctl vm.overcommit_memory=1
   sysctl: 
     name: vm.overcommit_memory

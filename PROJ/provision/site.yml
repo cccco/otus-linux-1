@@ -9,4 +9,11 @@
     - role: nc-redis
     - role: nc-php
     - role: nc-mysql
+    - role: nc-app
+  post_tasks:
+    - name: We are ready
+      debug:
+        msg: 
+          - "Your Nextcloud at https://{{ fqdn }} is ready."
+          - "Login with user: {{ nc_admin }} and password: {{ nc_passwd }} "
 

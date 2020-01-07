@@ -1,0 +1,22 @@
+---
+# defaults file for provision/roles/nc-app
+
+# Allways get the latest version of Nextcloud
+next_archive: 'https://download.nextcloud.com/server/releases/latest.tar.bz2'
+
+nc_db_user: 'nextcloud'
+nc_db_passwd: '9hPw0XeMlsg7CXMR'
+# admin user
+nc_admin: 'admin'
+nc_passwd: 'Passw0rd!'
+
+nc_config:
+  - { key: "overwrite.cli.url", value: '--value=https://{{ fqdn }}' }
+  - { key: "trusted_domains", value: '1 --value={{ fqdn }}' }
+
+nc_app_config:
+  - { key: "disable", value: "survey_client" }
+  - { key: "disable", value: "firstrunwizard" }
+  - { key: "enable",  value: "admin_audit" }
+  - { key: "enable",  value: "files_pdfviewer" }
+
