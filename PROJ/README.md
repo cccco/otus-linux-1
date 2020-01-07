@@ -69,7 +69,6 @@ Jan 06 16:16:35 nextcloud systemd[1]: Started The PHP FastCGI Process Manager.
 
 Known issues: 
 
-- `firewall-cmd --list-all` shows epmty 
 - `firewall-cmd --list-ports` shows empty (but reload...) 
 - selinux blocks php-fpm: 
 - `NOTICE: PHP message: PHP Fatal error:  apc_mmap: mkstemp on /tmp/apc.Vh4gUH failed in Unknown on line 0`  
