@@ -30,7 +30,7 @@
   shell: >
     php occ  maintenance:install
     --database mysql
-    --database-host "localhost"
+    --database-host "127.0.0.1"
     --database-name nextcloud
     --database-table-prefix oc_
     --database-user {{ nc_db_user }}

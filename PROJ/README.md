@@ -72,5 +72,5 @@ Known issues:
 - `firewall-cmd --list-ports` shows empty (but reload...) 
 - selinux blocks php-fpm: 
 - `NOTICE: PHP message: PHP Fatal error:  apc_mmap: mkstemp on /tmp/apc.Vh4gUH failed in Unknown on line 0`  
-- mariadb need to be replaced by mysql  
+- pay attention to 'localhost' in mysql tasks
 

@@ -1,76 +1,83 @@
 ---
 # tasks file for provision/roles/nc-mysql
 
-- name: add MariaDB repo
-  yum_repository:
-    name: mariadb
-    description: Extra Packages for Enterprise Linux 7 - $basearch
-    baseurl: http://yum.mariadb.org/10.3/centos{{ ansible_distribution_major_version|int }}-amd64
-    gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-    gpgcheck: yes
-    enabled: 1
-
-- name: install MariaDB
+- name: add MySQL repo
   yum:
-    name:
-      - MariaDB-server
-      - MariaDB-client
-    enablerepo: mariadb
+    name: "https://repo.mysql.com/mysql80-community-release-el7-3.noarch.rpm"
+    state: present
+
+- name: delete mariadb
+  yum:
+    name: mariadb-libs
+    state: removed
+
+- name: install MySQL
+  yum:
+    name: mysql-community-server
+    enablerepo: mysql80-community
     state: present
 
 - name: install PyMySQL from pip
   pip: 
-    name: PyMySQL
+    name: 
+      - PyMySQL
+      - cryptography
     state: present
 
-- name: create conf dir
-  file:
-    name: "/etc/my.cnf.d/"
-    owner: root
-    group: root
-    mode: 0755
-    state: directory
-
-- name: configure mariadb
+- name: configure mysql
   template:
     src: my.cnf.j2
-    dest: "/etc/my.cnf.d/my.cnf"
+    dest: "/etc/my.cnf"
     owner: root
     group: root
     mode: 0644
-  notify: restart mariadb
+  notify: restart mysql
 
-- name: start and enable MariaDB
+- name: start and enable MySQL
   systemd:
-    name: mysql
+    name: mysqld
     state: restarted
     enabled: true
 
-- name: remove anonymous user
-  mysql_user:
-    name: ''
-    host_all: yes
-    state: absent
-    login_unix_socket: "/var/lib/mysql/mysqld.sock"
+- name: get mysql root password
+  shell: "grep 'A temporary password is generated for root@localhost' /var/log/messages | awk -F ' ' '{print $(NF)}'"
+  register: generated_password
 
-- name: remove test db
-  mysql_db:
-    name: test
-    state: absent
-    login_unix_socket: "/var/lib/mysql/mysqld.sock"
-  
+- name: remove temp root mysql password
+  #  shell: "sed -i '/temporary password/d' /var/log/mysqld.log"
+  shell: "sed -i '/temporary password/d' /var/log/messages"
+  when: generated_password.stdout
+
+- name: update mysql root password
+  command: mysql --user root --password={{ generated_password.stdout }} --connect-expired-password --execute="ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ mysql_root_password }}';"
+  when: generated_password.stdout
+
+- name: change mysql password policy
+  lineinfile:
+    path: /etc/my.cnf
+    regexp: '^# validate_password.policy=LOW'
+    line: 'validate_password.policy=LOW'
+
+- name: restart MySQL
+  systemd:
+    name: mysqld
+    state: restarted
+    enabled: true
+
 - name: create nextcloud db
   mysql_db:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
     name: "nextcloud"
     collation: utf8mb4_general_ci
     encoding: utf8mb4
-    login_unix_socket: "/var/lib/mysql/mysqld.sock"
 
 - name: create nextcloud user
   mysql_user:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
     name:     "{{ nc_db_user }}"
     password: "{{ nc_db_passwd }}"
     priv:     "nextcloud.*:ALL"
     state: present
-    login_unix_socket: "/var/lib/mysql/mysqld.sock"
 
