@@ -14,6 +14,13 @@
     remote_src: true
     creates: /var/www/nextcloud/occ
 
+# bug in table collres_accesscache
+- name: fix nextcloud collres_accesscache primary key
+  lineinfile:
+    path: /var/www/nextcloud/core/Migrations/Version16000Date20190207141427.php
+    regexp: "\\$table->addUniqueIndex\\(\\['user_id', 'collection_id', 'resource_type', 'resource_id'\\], 'collres_unique_user'\\);"
+    line: "$table->setPrimaryKey(['user_id', 'collection_id', 'resource_type', 'resource_id'], 'collres_unique_user');"
+
 - name: set ownership back
   file: 
     dest: /var/www/
@@ -30,7 +37,7 @@
   shell: >
     php occ  maintenance:install
     --database mysql
-    --database-host "127.0.0.1"
+    --database-host "127.0.0.1:6446"
     --database-name nextcloud
     --database-table-prefix oc_
     --database-user {{ nc_db_user }}
