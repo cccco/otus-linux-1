@@ -1,15 +1,41 @@
 ---
-- hosts: nextcloud
-  name: setup everything
+- name: prepare OS
+  hosts: all
   become: yes
   roles:
-    - role: nc-os
-    - role: nc-nginx
-    - role: nc-ssl
-    - role: nc-redis
-    - role: nc-php
-    - role: nc-mysql
-    - role: nc-app
+    - nc-os
+
+- name: prepare InnoDB Cluster nodes
+  hosts:
+    - sqlnode1
+    - sqlnode2
+    - sqlnode3
+  become: yes
+  roles:
+    - icluster-node
+
+- name: setup InnoDB Cluster
+  hosts: nextcloud
+  become: yes
+  roles:
+    - icluster-setup
+
+- name: setup MySQL Router
+  hosts: nextcloud
+  become: yes
+  roles:
+    - icluster-router
+
+- name: setup everything else
+  hosts: nextcloud
+  become: yes
+  roles:
+    - nc-nginx
+    - nc-ssl
+    - nc-redis
+    - nc-php
+    - nc-mysql
+    - nc-app
   post_tasks:
     - name: Done!
       debug:

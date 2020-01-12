@@ -73,4 +73,8 @@ Known issues:
 - selinux blocks php-fpm: 
 - `NOTICE: PHP message: PHP Fatal error:  apc_mmap: mkstemp on /tmp/apc.Vh4gUH failed in Unknown on line 0`  
 - pay attention to 'localhost' in mysql tasks
+- postfix was removed as mariadb-libs dependency
+- make each role with it's own name in sity.yaml to fix handlers run
+- mysql nodes restarting when ansible run second time
+
 
