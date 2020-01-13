@@ -39,7 +39,7 @@
   post_tasks:
     - name: Done!
       debug:
-        msg: 
+        msg:
           - "Your Nextcloud at https://{{ fqdn }} is ready."
           - "Login with user: {{ nc_admin }} and password: {{ nc_passwd }} "
 

@@ -22,10 +22,10 @@
     line: "$table->setPrimaryKey(['user_id', 'collection_id', 'resource_type', 'resource_id'], 'collres_unique_user');"
 
 - name: set ownership back
-  file: 
+  file:
     dest: /var/www/
     owner: nginx
-    group: nginx 
+    group: nginx
     recurse: yes
 
 - name: flush all handlers to restart server

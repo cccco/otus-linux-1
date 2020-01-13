@@ -31,7 +31,7 @@
     state: disabled
 
 - name: sysctl vm.overcommit_memory=1
-  sysctl: 
+  sysctl:
     name: vm.overcommit_memory
     value: "1"
     state: present
@@ -59,13 +59,13 @@
     name: disable-transparent-huge-pages.service
     enabled: true
     state: started
-    
+
 - name: create symbolic link to /usr/bin/gs
   file:
     src:  /usr/bin/gs
     dest: /usr/local/bin/gs
     state: link
-    
+
 - name: change ImageMagick settings
   lineinfile:
     path:   '/etc/ImageMagick/policy.xml'

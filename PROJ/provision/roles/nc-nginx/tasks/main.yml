@@ -59,9 +59,9 @@
     - /usr/local/tmp/sessions
 
 - name: enable firewalld
-  service: 
-    name: firewalld 
-    state: started 
+  service:
+    name: firewalld
+    state: started
     enabled: yes
 
 - name: open firewall ports 22/80/443
