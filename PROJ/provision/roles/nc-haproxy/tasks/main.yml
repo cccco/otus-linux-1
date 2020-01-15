@@ -8,9 +8,7 @@
 
 - name: install haproxy
   yum: 
-    name: 
-      - haproxy20
-      - psmisc
+    name: haproxy20
     state: present
 
 - name: deploy haproxy config
