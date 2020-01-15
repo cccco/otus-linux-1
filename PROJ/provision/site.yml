@@ -26,12 +26,11 @@
   roles:
     - icluster-router
 
-- name: setup everything else
+- name: setup backend1
   hosts: nextcloud
   become: yes
   roles:
     - nc-nginx
-    - nc-ssl
     - nc-redis
     - nc-php
     - nc-mysql
@@ -42,4 +41,19 @@
         msg:
           - "Your Nextcloud at https://{{ fqdn }} is ready."
           - "Login with user: {{ nc_admin }} and password: {{ nc_passwd }} "
+
+- name: setup backend2
+  hosts: nextcloud2
+  become: yes
+  roles:
+    - nc-nginx
+    - nc-redis
+    - nc-php
+
+- name: setup haproxy1
+  hosts: haproxy1
+  become: yes
+  roles:
+    - nc-ssl
+    - nc-haproxy
 

@@ -115,15 +115,6 @@
     mode: 0644
   notify: restart nginx
 
-- name: copy nginx config for ssl
-  template:
-    src: ssl.conf.selfsigned.j2
-    dest: /etc/nginx/conf.d/ssl.conf
-    owner: root
-    group: root
-    mode: 0644
-  notify: restart nginx
-
 - name: copy other nginx config files
   copy:
     src: "{{ item }}"

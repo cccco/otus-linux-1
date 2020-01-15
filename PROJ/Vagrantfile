@@ -23,6 +23,18 @@ MACHINES = {
                       {ip: '192.168.56.10', adapter: 3, netmask: "255.255.255.0"},
                      ],
             },
+  :nextcloud2 => {
+             :box_name => "centos/7",
+             :net => [
+                      {ip: '192.168.56.12', adapter: 3, netmask: "255.255.255.0"},
+                     ],
+            },
+  :haproxy1 => {
+             :box_name => "centos/7",
+             :net => [
+                      {ip: '192.168.56.100', adapter: 3, netmask: "255.255.255.0"},
+                     ],
+            },
 }
 
 
