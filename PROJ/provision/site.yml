@@ -50,10 +50,20 @@
     - nc-redis
     - nc-php
 
-- name: setup haproxy1
-  hosts: haproxy1
+- name: setup haproxies
+  hosts: 
+    - haproxy1
+    - haproxy2
   become: yes
   roles:
     - nc-ssl
     - nc-haproxy
+
+- name: setup keepalived
+  hosts: 
+    - haproxy1
+    - haproxy2
+  become: yes
+  roles:
+    - nc-keepalived
 

@@ -1,5 +1,5 @@
 MACHINES = {
- :sqlnode1 => {
+  :sqlnode1 => {
              :box_name => "centos/7",
              :net => [
                       {ip: '192.168.56.21', adapter: 3, netmask: "255.255.255.0"},
@@ -33,6 +33,12 @@ MACHINES = {
              :box_name => "centos/7",
              :net => [
                       {ip: '192.168.56.100', adapter: 3, netmask: "255.255.255.0"},
+                     ],
+            },
+  :haproxy2 => {
+             :box_name => "centos/7",
+             :net => [
+                      {ip: '192.168.56.200', adapter: 3, netmask: "255.255.255.0"},
                      ],
             },
 }
