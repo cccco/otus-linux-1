@@ -13,6 +13,7 @@
   become: yes
   roles:
     - icluster-node
+    - nc-netdata-slave
 
 - name: setup InnoDB Cluster
   hosts: nextcloud
@@ -31,6 +32,7 @@
   become: yes
   roles:
     - nc-nginx
+    - nc-netdata-slave
     - nc-redis
     - nc-php
     - nc-mysql
@@ -47,6 +49,7 @@
   become: yes
   roles:
     - nc-nginx
+    - nc-netdata-slave
     - nc-redis
     - nc-php
 
@@ -58,6 +61,7 @@
   roles:
     - nc-ssl
     - nc-haproxy
+    - nc-netdata-slave
 
 - name: setup keepalived
   hosts: 
@@ -66,4 +70,10 @@
   become: yes
   roles:
     - nc-keepalived
+
+- name: setup netdata-master
+  hosts: mon
+  become: yes
+  roles:
+    - nc-netdata-master
 
