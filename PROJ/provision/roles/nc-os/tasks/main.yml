@@ -21,6 +21,7 @@
       - postfix
       - firewalld
       - facter
+      - git
       - policycoreutils-python
       - python2-pip
     state: present
