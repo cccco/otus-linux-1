@@ -1,0 +1,28 @@
+---
+# tasks file for provision/roles/nc-netdata-master
+
+- name: install prerequisites packages
+  yum:
+    name: "{{ netdata_pre_reqs }}"
+    state: present
+
+- name: cloning {{ netdata_git_repo }} to {{ netdata_source_dir }}
+  git:
+    repo: "{{ netdata_git_repo }}"
+    dest: "{{ netdata_source_dir }}"
+    depth: 1
+
+- name: install netdata
+  command: "{{ netdata_installer }} --dont-wait"
+  args:
+    chdir: "{{ netdata_source_dir }}"
+    creates: /usr/sbin/netdata
+
+- name:  copy stream.conf
+  template:
+    src: stream.conf.j2
+    dest: "{{ netdata_stream_config_file }}"
+    owner: "netdata"
+    group: root
+    mode: 0644
+  notify: restart netdata
