@@ -41,6 +41,12 @@ MACHINES = {
                       {ip: '192.168.56.200', adapter: 3, netmask: "255.255.255.0"},
                      ],
             },
+  :mon => {
+             :box_name => "centos/7",
+             :net => [
+                      {ip: '192.168.56.250', adapter: 3, netmask: "255.255.255.0"},
+                     ],
+            },
 }
 
 
