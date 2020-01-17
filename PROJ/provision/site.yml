@@ -14,6 +14,7 @@
   roles:
     - icluster-node
     - nc-netdata-slave
+    - nc-pmm-client
 
 - name: setup InnoDB Cluster
   hosts: nextcloud
@@ -76,4 +77,5 @@
   become: yes
   roles:
     - nc-netdata-master
+    - nc-pmm-server
 
