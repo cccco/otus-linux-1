@@ -1,0 +1,53 @@
+---
+# tasks file for provision/roles/nc-pmm-server
+
+- name: install prerequisites packages
+  yum:
+    name:
+      - yum-utils
+      - device-mapper-persistent-data
+      - lvm2
+      - python2-pip
+      - python-setuptools
+    state: present
+
+- name: add docker repo
+  get_url:
+    url: https://download.docker.com/linux/centos/docker-ce.repo
+    dest: /etc/yum.repos.d/docker-ce.repo
+
+- name: install docker
+  yum:
+    name:
+      - docker-ce
+      - docker-ce-cli
+    state: present
+  notify: start docker
+
+- name: force all notified handlers to run at this point
+  meta: flush_handlers
+
+- name: install docker module for python
+  pip:
+    name: docker
+
+- name: create pmm-data container
+  docker_container:
+    name: pmm-data
+    image: "percona/pmm-server:2"
+    command: "/bin/true"
+    volumes:
+      - /srv
+
+- name: create pmm-server container
+  docker_container:
+    name: pmm-server
+    image: "percona/pmm-server:2"
+    volumes_from:
+      - pmm-data
+    ports:
+     - "80:80"
+     - "443:443"
+    state: started
+    restart: yes
+
