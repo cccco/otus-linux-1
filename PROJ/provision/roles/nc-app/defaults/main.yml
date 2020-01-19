@@ -20,3 +20,6 @@ nc_app_config:
   - { key: "enable",  value: "admin_audit" }
   - { key: "enable",  value: "files_pdfviewer" }
 
+nc_main_dir: "/var/gluster/www/nextcloud/"
+
+fqdn: 'nc.example.org'

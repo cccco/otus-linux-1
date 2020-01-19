@@ -7,29 +7,26 @@
     dest: /tmp/nextcloud.tar.bz2
     checksum: "sha256:{{ next_archive }}.sha256"
 
-- name: install nextcloud
+- name: unpack nextcloud archive
   unarchive:
     src: /tmp/nextcloud.tar.bz2
-    dest: /var/www
+    dest: /var/gluster/www
     remote_src: true
-    creates: /var/www/nextcloud/occ
+    creates: /var/gluster/www/nextcloud/occ
 
 # bug in table collres_accesscache
 - name: fix nextcloud collres_accesscache primary key
   lineinfile:
-    path: /var/www/nextcloud/core/Migrations/Version16000Date20190207141427.php
+    path: /var/gluster/www/nextcloud/core/Migrations/Version16000Date20190207141427.php
     regexp: "\\$table->addUniqueIndex\\(\\['user_id', 'collection_id', 'resource_type', 'resource_id'\\], 'collres_unique_user'\\);"
     line: "$table->setPrimaryKey(['user_id', 'collection_id', 'resource_type', 'resource_id'], 'collres_unique_user');"
 
 - name: set ownership back
   file:
-    dest: /var/www/
+    dest: /var/gluster/www/
     owner: nginx
     group: nginx
     recurse: yes
-
-- name: flush all handlers to restart server
-  meta: flush_handlers
 
 - name: first setup nextcloud
   become_user: "nginx"
@@ -44,10 +41,10 @@
     --database-pass {{ nc_db_passwd }}
     --admin-user {{ nc_admin }}
     --admin-pass {{ nc_passwd }}
-    --data-dir /var/nc-data
+    --data-dir /var/gluster/nc-data
   args:
-    chdir: /var/www/nextcloud/
-    creates: /var/www/nextcloud/config/config.php
+    chdir: "{{ nc_main_dir }}"
+    creates: /var/gluster/www/nextcloud/config/config.php
   register: setup_nc
 
 - name: set nextcloud domain config.php values
@@ -55,7 +52,7 @@
   become: yes
   shell: php occ config:system:set {{ item.key }} {{ item.value }}
   args:
-    chdir: /var/www/nextcloud/
+    chdir: "{{ nc_main_dir }}"
   with_items: "{{ nc_config }}"
 
 - name: copy config.json to /tmp
@@ -70,7 +67,7 @@
   become: yes
   shell: php occ config:import /tmp/nextcloud.config.json
   args:
-    chdir: /var/www/nextcloud/
+    chdir: "{{ nc_main_dir }}"
   register: setup_nc_config
 
 - name: set cron to run background jobs
@@ -78,14 +75,14 @@
   become: yes
   shell: php occ background:cron
   args:
-    chdir: /var/www/nextcloud/
+    chdir: "{{ nc_main_dir }}"
 
 - name: adjust app settings
   become_user: "nginx"
   become: yes
   shell: php occ app:{{ item.key }} {{ item.value }}
   args:
-    chdir: /var/www/nextcloud/
+    chdir: "{{ nc_main_dir }}"
   with_items: "{{ nc_app_config }}"
 
 - name: add nextcloud cronjob
@@ -93,13 +90,13 @@
     name: nextcloud cronjob
     minute: '*/15'
     user: "nginx"
-    job: "php -f /var/www/nextcloud/cron.php > /dev/null 2>&1"
+    job: "php -f /var/gluster/www/nextcloud/cron.php > /dev/null 2>&1"
 
 - name: run nextcloud cronjob
   become_user: "nginx"
   become: yes
-  shell: php -f /var/www/nextcloud/cron.php
+  shell: php -f /var/gluster/www/nextcloud/cron.php
   args:
-    chdir: /var/www/nextcloud/
+    chdir: "{{ nc_main_dir }}"
   when: setup_nc is changed
 
