@@ -5,6 +5,13 @@
   roles:
     - nc-os
 
+- name: setup netdata-master
+  hosts: mon
+  become: yes
+  roles:
+    - nc-netdata-master
+    - nc-pmm-server
+
 - name: prepare InnoDB Cluster nodes
   hosts:
     - sqlnode1
@@ -16,14 +23,32 @@
     - nc-netdata-slave
     - nc-pmm-client
 
+- name: prepare GlusterFS nodes
+  hosts:
+    - glnode1
+    - glnode2
+  become: yes
+  roles:
+    - nc-gluster-infra
+    - nc-gluster-setup
+    - nc-netdata-slave
+
+- name: setup GlusterFS
+  hosts: glnode2
+  become: yes
+  roles:
+    - nc-gluster-run
+
 - name: setup InnoDB Cluster
   hosts: nextcloud
   become: yes
   roles:
     - icluster-setup
 
-- name: setup MySQL Router
-  hosts: nextcloud
+- name: setup MySQL Routers
+  hosts: 
+    - nextcloud
+    - nextcloud2
   become: yes
   roles:
     - icluster-router
@@ -32,11 +57,17 @@
   hosts: nextcloud
   become: yes
   roles:
+    - nc-gluster-client
     - nc-nginx
     - nc-netdata-slave
     - nc-redis
     - nc-php
     - nc-mysql
+
+- name: install nextcloud app
+  hosts: nextcloud
+  become: yes
+  roles:
     - nc-app
   post_tasks:
     - name: Done!
@@ -49,6 +80,7 @@
   hosts: nextcloud2
   become: yes
   roles:
+    - nc-gluster-client
     - nc-nginx
     - nc-netdata-slave
     - nc-redis
@@ -60,6 +92,7 @@
     - haproxy2
   become: yes
   roles:
+    - nc-gluster-client
     - nc-ssl
     - nc-haproxy
     - nc-netdata-slave
@@ -71,11 +104,4 @@
   become: yes
   roles:
     - nc-keepalived
-
-- name: setup netdata-master
-  hosts: mon
-  become: yes
-  roles:
-    - nc-netdata-master
-    - nc-pmm-server
 
