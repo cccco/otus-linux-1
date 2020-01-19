@@ -83,8 +83,8 @@
     group: "{{ item.group }}"
     mode: "{{ item.mode }}"
   with_items:
-    - { path: '/var/nc-data',    owner: 'nginx', group: 'nginx', mode: '0750' }
-    - { path: '/var/www',        owner: 'nginx', group: 'nginx', mode: '0750' }
+    - { path: '/var/gluster/nc-data',    owner: 'nginx', group: 'nginx', mode: '0750' }
+    - { path: '/var/gluster/www',        owner: 'nginx', group: 'nginx', mode: '0750' }
     - { path: '/upload_tmp',     owner: 'nginx', group: 'nginx', mode: '0755' }
 
 - name: copy nginx.conf

@@ -1,7 +1,7 @@
 server {
 	listen 80 default_server;
 	server_name {{ fqdn }};
-	root /var/www/nextcloud/;
+	root /var/gluster/www/nextcloud/;
 	access_log /var/log/nginx/nextcloud.access.log main;
 	error_log /var/log/nginx/nextcloud.error.log warn;
 
