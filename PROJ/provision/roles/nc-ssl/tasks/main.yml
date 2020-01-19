@@ -54,6 +54,11 @@
     csr_path: /etc/ssl/certs/cert.csr
     provider: selfsigned
 
+- name: create ssl dir
+  file:
+    path: /var/gluster/certs
+    state: directory
+
 - name: create bundle cert for haproxy
-  shell: cat /etc/ssl/certs/cert.pem /etc/ssl/certs/key.pem > /etc/ssl/nc.example.org.pem
+  shell: cat /etc/ssl/certs/cert.pem /etc/ssl/certs/key.pem > /var/gluster/certs/nc.example.org.pem
 
