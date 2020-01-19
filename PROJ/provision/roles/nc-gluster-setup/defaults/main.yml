@@ -1,0 +1,7 @@
+---
+# defaults file for provision/roles/nc-gluster-setup
+
+gluster_cluster_hosts:
+  - glnode1
+  - glnode2
+
