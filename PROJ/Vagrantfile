@@ -1,51 +1,75 @@
 MACHINES = {
+  :mon => {
+             :box_name => "centos/7",
+             :net => [
+                      {ip: '192.168.56.250', adapter: 3, netmask: "255.255.255.0"},
+                     ],
+             :disk => "NO",
+            },
   :sqlnode1 => {
              :box_name => "centos/7",
              :net => [
                       {ip: '192.168.56.21', adapter: 3, netmask: "255.255.255.0"},
                      ],
+             :disk => "NO",
             },
   :sqlnode2 => {
              :box_name => "centos/7",
              :net => [
                       {ip: '192.168.56.22', adapter: 3, netmask: "255.255.255.0"},
                      ],
+             :disk => "NO",
             },
   :sqlnode3 => {
              :box_name => "centos/7",
              :net => [
                       {ip: '192.168.56.23', adapter: 3, netmask: "255.255.255.0"},
                      ],
+             :disk => "NO",
+            },
+  :glnode1 => {
+             :box_name => "centos/7",
+             :net => [
+                      {ip: '192.168.56.31', adapter: 3, netmask: "255.255.255.0"},
+                     ],
+             :disk => "YES",
+             :disk_file => "./gdisk1.vdi",
+            },
+  :glnode2 => {
+             :box_name => "centos/7",
+             :net => [
+                      {ip: '192.168.56.32', adapter: 3, netmask: "255.255.255.0"},
+                     ],
+             :disk => "YES",
+             :disk_file => "./gdisk2.vdi",
             },
   :nextcloud => {
              :box_name => "centos/7",
              :net => [
                       {ip: '192.168.56.10', adapter: 3, netmask: "255.255.255.0"},
                      ],
+             :disk => "NO",
             },
   :nextcloud2 => {
              :box_name => "centos/7",
              :net => [
                       {ip: '192.168.56.12', adapter: 3, netmask: "255.255.255.0"},
                      ],
+             :disk => "NO",
             },
   :haproxy1 => {
              :box_name => "centos/7",
              :net => [
                       {ip: '192.168.56.100', adapter: 3, netmask: "255.255.255.0"},
                      ],
+             :disk => "NO",
             },
   :haproxy2 => {
              :box_name => "centos/7",
              :net => [
                       {ip: '192.168.56.200', adapter: 3, netmask: "255.255.255.0"},
                      ],
-            },
-  :mon => {
-             :box_name => "centos/7",
-             :net => [
-                      {ip: '192.168.56.250', adapter: 3, netmask: "255.255.255.0"},
-                     ],
+             :disk => "NO",
             },
 }
 
@@ -66,9 +90,17 @@ Vagrant.configure("2") do |config|
         boxconfig[:net].each do |ipconf|
           box.vm.network "private_network", ipconf
         end
+        box.vm.synced_folder '.', '/vagrant', disabled: true
         box.vm.provider "virtualbox" do |v|
           v.memory = 2048
           v.cpus = 2
+          if boxconfig[:disk]=="YES"
+            if not File.exists?(boxconfig[:disk_file])
+              v.customize ['createhd', '--filename', boxconfig[:disk_file], '--size', 10 * 1024]
+              v.customize ['storagectl', :id, '--name', 'SATA Controller', '--add', 'sata', '--portcount', 2]
+            end
+            v.customize ['storageattach', :id,  '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', boxconfig[:disk_file]]
+          end
         end
         box.vm.provision "shell" do |shell|
           shell.inline = 'echo -e "$1" > /etc/hosts'
