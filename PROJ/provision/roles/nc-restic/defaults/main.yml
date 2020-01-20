@@ -1,0 +1,49 @@
+---
+restic_version: '0.9.5'
+
+restic_user: root
+restic_group: root
+restic_shell: "/bin/false"
+restic_home: "/var/lib/restic"
+
+restic_install_path: '/usr/local/bin'
+
+restic_initialize_repos: true
+
+restic_cron_mailto: root
+restic_cron_stdout_file: null
+restic_cron_stderr_file: null
+
+restic_sudo_command_whitelist: []
+# restic_sudo_command_whitelist:
+#   - command: /usr/bin/some_backup_related_command_that_needs_sudo
+#     runas: root
+
+restic_repos:
+  - name: nextcloud
+    url: "sftp:root@mon:/srv/restic-repo"
+    password: "what"
+    jobs:
+      - command: 'restic backup /var/gluster/www/nextcloud'
+        at: '0 1  * * *'
+# restic_repos:
+#   jobs:
+#     - command: 'restic backup /srv'
+#       at: '0 1  * * *'
+#   retention_time: '17 5 * * *'
+#   retention:
+#     last: 2
+#     hourly: 4
+#     daily: 10
+#     weekly: 9
+#     monthly: 3
+#     yearly: 10
+#     tags:
+#       - special
+# - name: backblaze-example
+#   jobs:
+#     - command: 'restic backup /var'
+#       at: '0 4  * * *'
+#     - command: 'restic backup /home'
+#       at: '0 3  * * *'
+#       user: 'restic'
