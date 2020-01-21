@@ -58,23 +58,6 @@
     - /usr/local/tmp/cache
     - /usr/local/tmp/sessions
 
-- name: enable firewalld
-  service:
-    name: firewalld
-    state: started
-    enabled: yes
-
-- name: open firewall ports 22/80/443
-  firewalld:
-    port: "{{ item }}"
-    permanent: true
-    immediate: true
-    state: enabled
-  with_items:
-    - '22/tcp'
-    - '80/tcp'
-    - '443/tcp'
-
 - name: create some folders
   file:
     name: "{{ item.path }}"
