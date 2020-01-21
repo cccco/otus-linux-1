@@ -18,7 +18,7 @@
   changed_when: false
 
 - name: register node within PMM2 server
-  command: pmm-admin config --server-insecure-tls --server-url=https://admin:admin@mon:443 "{{ ansible_eth1.ipv4.address }}" 
+  command: pmm-admin config --server-insecure-tls --server-url=https://admin:admin@mon:443 "{{ ansible_eth1.ipv4.address }}"
   when: >
         (not ansible_check_mode) and
         (pmm_admin_list.stderr.find("pmm-agent is running, but not set up") != -1)
@@ -33,7 +33,7 @@
 
 - name: add mysql service to monitoring
   command: pmm-admin add mysql --username=icadmin --password=Passw0rd --query-source=perfschema
-  when: > 
+  when: >
         ( not ansible_check_mode ) and
         ( pmm_admin_list_add.rc == 1 )
 

@@ -9,8 +9,8 @@
     state: present
 
 - name: copy keepalived.conf
-  template: 
-    src: keepalived.conf.j2 
+  template:
+    src: keepalived.conf.j2
     dest: /etc/keepalived/keepalived.conf
   notify: restart keepalived
 

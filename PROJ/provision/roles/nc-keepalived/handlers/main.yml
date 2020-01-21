@@ -2,13 +2,13 @@
 # handlers file for provision/roles/nc-keepalived
 
 - name: start keepalived
-  service: 
-    name: keepalived 
+  service:
+    name: keepalived
     state: started
 
 - name: restart keepalived
-  service: 
-    name: keepalived 
+  service:
+    name: keepalived
     state: restarted
     enabled: yes
 

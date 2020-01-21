@@ -2,18 +2,18 @@
 # tasks file for provision/roles/nc-haproxy
 
 - name: install IUS repo
-  yum: 
+  yum:
     name: https://repo.ius.io/ius-release-el7.rpm
     state: present
 
 - name: install haproxy
-  yum: 
+  yum:
     name: haproxy20
     state: present
 
 - name: deploy haproxy config
-  template: 
-    src: haproxy.cfg.j2 
+  template:
+    src: haproxy.cfg.j2
     dest: /etc/haproxy/haproxy.cfg
     validate: /usr/sbin/haproxy -c -f %s
   notify: restart haproxy

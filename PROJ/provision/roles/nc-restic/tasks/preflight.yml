@@ -24,7 +24,7 @@
       dest: /tmp/restic-{{ restic_version }}-SHA256SUMS
 
 - name: Set checksum variable
-  slurp: 
+  slurp:
       src: "/tmp/restic-{{ restic_version }}-SHA256SUMS"
   register: _checksums
 
