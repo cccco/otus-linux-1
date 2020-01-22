@@ -17,6 +17,20 @@
     enablerepo: mysql80-community
     state: present
 
+- name: install MySQL shell
+  yum:
+    name: mysql-shell
+    enablerepo: mysql80-community
+    state: present
+
+- name: add mysqlsh aliases
+  lineinfile:
+    dest: "/root/.bashrc"
+    create: yes
+    mode: 0644
+    line: 'alias check-cluster="mysqlsh icadmin@sqlnode1:3306 -- cluster status"'
+    regexp: "^alias check-cluster="
+
 - name: bootstrap MySQL Router
   shell: echo "Passw0rd" | mysqlrouter --bootstrap icadmin@sqlnode1:3306 --user=mysqlrouter --conf-use-sockets
   args:
