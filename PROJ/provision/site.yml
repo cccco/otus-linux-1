@@ -4,6 +4,7 @@
   become: yes
   roles:
     - nc-os
+    - nc-firewalld
 
 - name: setup netdata-master
   hosts: mon
@@ -11,6 +12,8 @@
   roles:
     - nc-netdata-master
     - nc-pmm-server
+    - nc-backup-user
+    - nc-rsyslog-server
 
 - name: prepare InnoDB Cluster nodes
   hosts:
@@ -20,8 +23,9 @@
   become: yes
   roles:
     - icluster-node
-    - nc-netdata-slave
+    #    - nc-netdata-slave
     - nc-pmm-client
+    - nc-rsyslog-sender
 
 - name: prepare GlusterFS nodes
   hosts:
@@ -32,6 +36,7 @@
     - nc-gluster-infra
     - nc-gluster-setup
     - nc-netdata-slave
+    - nc-rsyslog-sender
 
 - name: setup GlusterFS
   hosts: glnode2
@@ -46,12 +51,13 @@
     - icluster-setup
 
 - name: setup MySQL Routers
-  hosts: 
+  hosts:
     - nextcloud
     - nextcloud2
   become: yes
   roles:
     - icluster-router
+    - nc-rsyslog-sender
 
 - name: setup backend1
   hosts: nextcloud
@@ -59,7 +65,9 @@
   roles:
     - nc-gluster-client
     - nc-nginx
-    - nc-netdata-slave
+    #    - nc-netdata-slave
+    - nc-backup-user
+    - nc-restic
     - nc-redis
     - nc-php
     - nc-mysql
@@ -82,12 +90,12 @@
   roles:
     - nc-gluster-client
     - nc-nginx
-    - nc-netdata-slave
+    #    - nc-netdata-slave
     - nc-redis
     - nc-php
 
 - name: setup haproxies
-  hosts: 
+  hosts:
     - haproxy1
     - haproxy2
   become: yes
@@ -95,10 +103,11 @@
     - nc-gluster-client
     - nc-ssl
     - nc-haproxy
-    - nc-netdata-slave
+    #    - nc-netdata-slave
+    - nc-rsyslog-sender
 
 - name: setup keepalived
-  hosts: 
+  hosts:
     - haproxy1
     - haproxy2
   become: yes
