@@ -1,6 +1,16 @@
 ---
 # tasks file for provision/roles/nc-netdata-master
 
+- name: install IUS repo
+  yum:
+    name: https://repo.ius.io/ius-release-el7.rpm
+    state: present
+
+- name: remove conficting packages
+  yum:
+    name: git
+    state: absent
+
 - name: install prerequisites packages
   yum:
     name: "{{ netdata_pre_reqs }}"

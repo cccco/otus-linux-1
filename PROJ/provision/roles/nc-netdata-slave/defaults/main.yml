@@ -12,6 +12,7 @@ netdata_pre_reqs:
   - cronie
   - curl
   - gcc
+  - git2u
   - iproute
   - libmnl-devel
   - libuuid-devel
