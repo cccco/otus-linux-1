@@ -1,2 +1,4 @@
 ---
 # defaults file for provision/roles/nc-os
+
+ntp_timezone: Europe/Kiev

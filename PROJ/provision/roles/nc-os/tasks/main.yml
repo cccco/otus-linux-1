@@ -22,6 +22,8 @@
       - firewalld
       - facter
       - git
+      - ntp
+      - tzdata
       - policycoreutils-python
       - python2-pip
     state: present
@@ -30,6 +32,11 @@
 - name: disable SELinux
   selinux:
     state: disabled
+
+- name: set timezone
+  timezone:
+    name: "{{ ntp_timezone }}"
+  notify: restart ntp
 
 - name: sysctl vm.overcommit_memory=1
   sysctl:
