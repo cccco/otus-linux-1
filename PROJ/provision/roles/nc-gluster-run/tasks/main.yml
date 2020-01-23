@@ -13,8 +13,10 @@
           performance.cache-max-file-size: '2MB',
           performance.md-cache-timeout: '600',
           performance.cache-invalidation: 'on',
+          network.ping-timeout: '5',
           features.cache-invalidation-timeout: '600',
           performance.stat-prefetch: 'on',
           features.cache-invalidation: 'on' }
+        force: true
   run_once: true
 
