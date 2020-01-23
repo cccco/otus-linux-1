@@ -16,7 +16,6 @@
   with_items:
     - '22/tcp'
     - '80/tcp'
-    - '443/tcp'
   when: >
         ( ansible_hostname == 'nextcloud' ) or
         ( ansible_hostname == 'nextcloud2' )
