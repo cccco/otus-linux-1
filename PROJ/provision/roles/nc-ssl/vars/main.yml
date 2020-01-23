@@ -1,2 +1,5 @@
 ---
 # vars file for provision/roles/nc-ssl
+
+haproxy_certs_dir: '/var/gluster/certs'
+

@@ -3,7 +3,7 @@
 
 - name: use the pre-defined DH groups ffdhe4096 recommended by the IETF in [RFC 7919 https://tools.ietf.org/html/rfc7919]
   copy:
-    dest: "/etc/ssl/certs/dhparam.pem"
+    dest: "{{ haproxy_certs_dir }}/dhparam.pem"
     owner: root
     group: root
     mode:  0644
@@ -37,28 +37,28 @@
     name: pyOpenSSL
     state: present
 
+- name: create ssl dir
+  file:
+    path: "{{ haproxy_certs_dir }}"
+    state: directory
+
 - name: generate an openssl private key with the default values
   openssl_privatekey:
-    path: /etc/ssl/certs/key.pem
+    path: "{{ haproxy_certs_dir }}/key.pem"
 
 - name: generate an openssl certificate signing request
   openssl_csr:
-    path: /etc/ssl/certs/cert.csr
-    privatekey_path: /etc/ssl/certs/key.pem
+    path: "{{ haproxy_certs_dir }}/cert.csr"
+    privatekey_path: "{{ haproxy_certs_dir }}/key.pem"
     common_name: "{{ fqdn }}"
 
 - name: Generate a Self Signed OpenSSL certificate
   openssl_certificate:
-    path: /etc/ssl/certs/cert.pem
-    privatekey_path: /etc/ssl/certs/key.pem
-    csr_path: /etc/ssl/certs/cert.csr
+    path: "{{ haproxy_certs_dir }}/cert.pem"
+    privatekey_path: "{{ haproxy_certs_dir }}/key.pem"
+    csr_path: "{{ haproxy_certs_dir }}/cert.csr"
     provider: selfsigned
 
-- name: create ssl dir
-  file:
-    path: /var/gluster/certs
-    state: directory
-
 - name: create bundle cert for haproxy
-  shell: cat /etc/ssl/certs/cert.pem /etc/ssl/certs/key.pem > /var/gluster/certs/nc.example.org.pem
+  shell: cat /var/gluster/certs/cert.pem /var/gluster/certs/key.pem > /var/gluster/certs/nc.example.org.pem
 
