@@ -11,7 +11,7 @@ nc_admin: 'admin'
 nc_passwd: 'Passw0rd!'
 
 nc_config:
-  - { key: "overwrite.cli.url", value: '--value=https://{{ fqdn }}' }
+  - { key: "overwrite.cli.url", value: '--value=http://{{ fqdn }}' }
   - { key: "trusted_domains", value: '1 --value={{ fqdn }}' }
 
 nc_app_config:
