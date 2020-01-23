@@ -77,12 +77,6 @@
   become: yes
   roles:
     - nc-app
-  post_tasks:
-    - name: Done!
-      debug:
-        msg:
-          - "Your Nextcloud at https://{{ fqdn }} is ready."
-          - "Login with user: {{ nc_admin }} and password: {{ nc_passwd }} "
 
 - name: setup backend2
   hosts: nextcloud2
