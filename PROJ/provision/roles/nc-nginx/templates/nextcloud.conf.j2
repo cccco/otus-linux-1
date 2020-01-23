@@ -40,7 +40,6 @@ server {
 		include fastcgi_params;
 		include /etc/nginx/conf.d/php_optimization.conf;
 		fastcgi_pass php-handler;
-		fastcgi_param HTTPS on;
 	}
 	location ~ ^/(?:index|remote|public|cron|core/ajax/update|status|ocs/v[12]|updater/.+|ocs-provider/.+)\.php(?:$|/) {
 		fastcgi_split_path_info ^(.+\.php)(/.*)$;
@@ -48,7 +47,6 @@ server {
 		include fastcgi_params;
 		include /etc/nginx/conf.d/php_optimization.conf;
 		fastcgi_pass php-handler;
-		fastcgi_param HTTPS on;
 	}
 	location ~ ^/(?:updater|ocs-provider)(?:$|/) {
 		try_files $uri/ =404;
