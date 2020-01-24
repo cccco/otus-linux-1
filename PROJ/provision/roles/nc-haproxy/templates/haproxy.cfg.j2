@@ -71,6 +71,6 @@ backend nc-back
     balance     roundrobin
     option forwardfor
     option httpchk HEAD / HTTP/1.1\r\nHost:nc.example.org
-    server nextcloud 192.168.56.10:80 cookie nextcloud check
-    server nextcloud2 192.168.56.12:80 check
+    server backend1 192.168.56.10:80 cookie backend1 check
+    server backend2 192.168.56.12:80 check
 

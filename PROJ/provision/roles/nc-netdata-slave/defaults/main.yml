@@ -31,8 +31,8 @@ netdata_pre_reqs:
   - zlib-devel
 netdata_stream_master_node: "mon:19999"
 clients:
-  - { name: 'nextcloud', uuid: '7a926756-55c0-4df4-be1b-36ab15b493f9' }
-  - { name: 'nextcloud2', uuid: '8df789c0-652a-4282-b414-eafd5b065dd2' }
+  - { name: 'backend1', uuid: '7a926756-55c0-4df4-be1b-36ab15b493f9' }
+  - { name: 'backend2', uuid: '8df789c0-652a-4282-b414-eafd5b065dd2' }
   - { name: 'sqlnode1', uuid: 'e5af82f6-71ad-4bcb-8880-4cdd93abff6b' }
   - { name: 'sqlnode2', uuid: '5df20fd7-fd71-4c65-bd9b-5d6c2e8e8547' }
   - { name: 'sqlnode3', uuid: '3184ac76-c467-4d50-8bd2-c6f5c7e30e78' }

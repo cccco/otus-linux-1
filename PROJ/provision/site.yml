@@ -45,22 +45,22 @@
     - nc-gluster-run
 
 - name: setup InnoDB Cluster
-  hosts: nextcloud
+  hosts: backend1
   become: yes
   roles:
     - icluster-setup
 
 - name: setup MySQL Routers
   hosts:
-    - nextcloud
-    - nextcloud2
+    - backend1
+    - backend2
   become: yes
   roles:
     - icluster-router
     - nc-rsyslog-sender
 
 - name: setup backend1
-  hosts: nextcloud
+  hosts: backend1
   become: yes
   roles:
     - nc-gluster-client
@@ -73,13 +73,13 @@
     - nc-mysql
 
 - name: install nextcloud app
-  hosts: nextcloud
+  hosts: backend1
   become: yes
   roles:
     - nc-app
 
 - name: setup backend2
-  hosts: nextcloud2
+  hosts: backend2
   become: yes
   roles:
     - nc-gluster-client

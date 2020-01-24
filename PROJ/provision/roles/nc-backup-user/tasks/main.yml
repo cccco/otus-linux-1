@@ -14,7 +14,7 @@
     state: directory
     owner: root
     group: root
-  when: ansible_hostname == 'nextcloud'
+  when: ansible_hostname == 'backend1'
 
 - name: copy ssh keys
   copy: src=files/ssh/{{ item }} dest=/root/.ssh/ mode=0600 owner=root group=root
@@ -22,5 +22,5 @@
     - id_rsa
     - id_rsa.pub
     - config
-  when: ansible_hostname == 'nextcloud'
+  when: ansible_hostname == 'backend1'
 

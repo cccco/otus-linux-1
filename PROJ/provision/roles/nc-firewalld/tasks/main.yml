@@ -17,8 +17,8 @@
     - '22/tcp'
     - '80/tcp'
   when: >
-        ( ansible_hostname == 'nextcloud' ) or
-        ( ansible_hostname == 'nextcloud2' )
+        ( ansible_hostname == 'backend1' ) or
+        ( ansible_hostname == 'backend2' )
 
 - name: open firewall ports mysql
   firewalld:
