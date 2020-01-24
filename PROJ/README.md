@@ -11,6 +11,10 @@
 
 ---
 
+### Общая схема проекта
+
+![topology](https://github.com/sinist3rr/otus-linux/blob/master/PROJ/images/HA-PROJ.png)
+
 ### Запуск
 
 Реализовано в виде ролей ansible.  
@@ -25,9 +29,13 @@ vagrant up
 
 Устанавливается Nextcloud Server.  
 
-Проверить можно обратившись по адресу: 
+Предварительно необходимо прописать в свой /etc/hosts плавающий IP:  
+`192.168.56.80 nc.example.org`
 
-http://192.168.56.10 
+После этого можно подключаться по адресу: 
+
+http://nc.example.org
+
 
 Проверяем работу php-fpm	
 
@@ -69,12 +77,9 @@ Jan 06 16:16:35 nextcloud systemd[1]: Started The PHP FastCGI Process Manager.
 
 Known issues: 
 
-- `firewall-cmd --list-ports` shows empty (but reload...) 
-- selinux blocks php-fpm: 
-- `NOTICE: PHP message: PHP Fatal error:  apc_mmap: mkstemp on /tmp/apc.Vh4gUH failed in Unknown on line 0`  
 - pay attention to 'localhost' in mysql tasks
-- postfix was removed as mariadb-libs dependency
-- make each role with it's own name in sity.yaml to fix handlers run
 - mysql nodes restarting when ansible run second time
-
+- RAM on mon is almost all used
+- haproxy service starts before gluster share is mounted
+- rename nextcloud to backend
 
