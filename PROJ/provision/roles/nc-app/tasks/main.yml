@@ -50,7 +50,7 @@
 - name: set nextcloud domain config.php values
   become_user: "nginx"
   become: yes
-  shell: php occ config:system:set {{ item.key }} {{ item.value }}
+  command: php occ config:system:set {{ item.key }} {{ item.value }}
   args:
     chdir: "{{ nc_main_dir }}"
   with_items: "{{ nc_config }}"
@@ -65,7 +65,7 @@
 - name: set default config
   become_user: "nginx"
   become: yes
-  shell: php occ config:import /tmp/nextcloud.config.json
+  command: php occ config:import /tmp/nextcloud.config.json
   args:
     chdir: "{{ nc_main_dir }}"
   register: setup_nc_config
@@ -73,14 +73,14 @@
 - name: set cron to run background jobs
   become_user: "nginx"
   become: yes
-  shell: php occ background:cron
+  command: php occ background:cron
   args:
     chdir: "{{ nc_main_dir }}"
 
 - name: adjust app settings
   become_user: "nginx"
   become: yes
-  shell: php occ app:{{ item.key }} {{ item.value }}
+  command: php occ app:{{ item.key }} {{ item.value }}
   args:
     chdir: "{{ nc_main_dir }}"
   with_items: "{{ nc_app_config }}"
@@ -95,7 +95,7 @@
 - name: run nextcloud cronjob
   become_user: "nginx"
   become: yes
-  shell: php -f /var/gluster/www/nextcloud/cron.php
+  command: php -f /var/gluster/www/nextcloud/cron.php
   args:
     chdir: "{{ nc_main_dir }}"
   when: setup_nc is changed

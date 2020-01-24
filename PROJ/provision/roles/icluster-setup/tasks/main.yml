@@ -26,7 +26,7 @@
     mode: '0600'
 
 - name: setup cluster and add all nodes
-  shell: mysqlsh --file setupCluster.js
+  command: mysqlsh --file setupCluster.js
   args:
     chdir: /root/
     creates: /root/.mysqlsh/mysqlsh.log
