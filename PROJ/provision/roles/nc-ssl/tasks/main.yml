@@ -1,6 +1,11 @@
 ---
 # tasks file for provision/roles/nc-ssl
 
+- name: create ssl dir
+  file:
+    path: "{{ haproxy_certs_dir }}"
+    state: directory
+
 - name: use the pre-defined DH groups ffdhe4096 recommended by the IETF in [RFC 7919 https://tools.ietf.org/html/rfc7919]
   copy:
     dest: "{{ haproxy_certs_dir }}/dhparam.pem"
@@ -37,11 +42,6 @@
     name: pyOpenSSL
     state: present
 
-- name: create ssl dir
-  file:
-    path: "{{ haproxy_certs_dir }}"
-    state: directory
-
 - name: generate an openssl private key with the default values
   openssl_privatekey:
     path: "{{ haproxy_certs_dir }}/key.pem"
@@ -59,6 +59,25 @@
     csr_path: "{{ haproxy_certs_dir }}/cert.csr"
     provider: selfsigned
 
-- name: create bundle cert for haproxy
-  shell: cat /var/gluster/certs/cert.pem /var/gluster/certs/key.pem > /var/gluster/certs/nc.example.org.pem
+- name: create assemble dir
+  file:
+    path: "{{ haproxy_prep_dir }}"
+    state: directory
+
+- name: move cert.pem
+  copy:
+    remote_src: yes
+    src: "{{ haproxy_certs_dir }}/cert.pem"
+    dest: "{{ haproxy_prep_dir }}/1-cert.pem"
+
+- name: move key.pem
+  copy:
+    remote_src: yes
+    src: "{{ haproxy_certs_dir }}/key.pem"
+    dest: "{{ haproxy_prep_dir }}/2-key.pem"
+
+- name: assemble bundle ssl cert from fragments
+  assemble:
+    src: "{{ haproxy_prep_dir }}"
+    dest: "{{ haproxy_certs_dir }}/nc.example.org.pem"
 
