@@ -4,8 +4,8 @@
 - name: add php73 repo
   yum_repository:
     name: remi-php73
-    description: Remi's PHP 73 RPM repository for Enterprise Linux {{ ansible_distribution_major_version|int }} - $basearch
-    mirrorlist: https://rpms.remirepo.net/enterprise/{{ ansible_distribution_major_version|int }}/php73/httpsmirror
+    description: Remi's PHP 7.3 RPM repository for Enterprise Linux 7 - $basearch
+    mirrorlist: http://cdn.remirepo.net/enterprise/7/php73/mirror
     gpgkey: http://rpms.remirepo.net/RPM-GPG-KEY-remi
     gpgcheck: yes
     enabled: 1
@@ -13,8 +13,8 @@
 - name: add remi safe repo
   yum_repository:
     name: remi-safe
-    description: Safe Remi’s RPM repository for Enterprise Linux $releasever - $basearch
-    mirrorlist: http://rpms.remirepo.net/enterprise/$releasever/safe/mirror
+    description: Safe Remi's RPM repository for Enterprise Linux 7 - $basearch
+    mirrorlist: http://cdn.remirepo.net/enterprise/7/safe/mirror
     gpgkey: http://rpms.remirepo.net/RPM-GPG-KEY-remi
     gpgcheck: yes
     enabled: 1
@@ -22,11 +22,11 @@
 - name: add remi repo
   yum_repository:
     name: remi
-    description: Remi’s RPM repository for Enterprise Linux $releasever - $basearch
-    mirrorlist: http://rpms.remirepo.net/enterprise/$releasever/remi/mirror
+    description: Remi's RPM repository for Enterprise Linux 7 - $basearch
+    mirrorlist: http://cdn.remirepo.net/enterprise/7/remi/mirror
     gpgkey: http://rpms.remirepo.net/RPM-GPG-KEY-remi
     gpgcheck: yes
-    enabled: 1
+    enabled: 0
 
 - name: install php packages
   yum:
@@ -46,12 +46,10 @@
       - php-pecl-imagick
       - php-common
       - php-gmp
-      - php-intl
       - php-imap
       - php-ldap
       - php-opcache
       - php-mcrypt
-#      - php-mysql
       - php-pear
       - php-pdo
       - php-pecl-apcu
