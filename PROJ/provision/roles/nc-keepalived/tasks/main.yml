@@ -28,3 +28,10 @@
     state: present
     reload: yes
 
+- name: change systemd unit files
+  copy:
+    src: "{{ item }}"
+    dest: /etc/systemd/system/
+    owner: root
+  with_fileglob:
+    - files/units/*
